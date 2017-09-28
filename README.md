@@ -8,10 +8,9 @@ For more information see [the docs](https://fable-elmish.github.io/debugger).
 
 ## Installation
 ```shell
-yarn add remotedev@^0.2.4 -D
-paket add nuget Fable.Elmish.Debugger
+paket add nuget Fable.Elmish.HMR
 ```
 
-Follow the monitor installation instructions at [Remote DevTools](https://github.com/zalmoxisus/remotedev) site.
+## Demo
 
-
+![hmr demo](docs/files/img/hmr_demo.gif)
