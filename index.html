@@ -13,8 +13,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="https://fable-elmish.github.io/hmr/content/style_light.css" />
-    <script type="text/javascript" src="https://fable-elmish.github.io/hmr/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="file://C:\Users\mange\Workspace\Github\fable-elmish\hmr\docs\tools\../output/content/style_light.css" />
+    <script type="text/javascript" src="file://C:\Users\mange\Workspace\Github\fable-elmish\hmr\docs\tools\../output/content/tips.js"></script>
     <style>span.l { display: none }</style>
   </head>
   <body>
@@ -25,7 +25,7 @@
           <li><a href="http://fable.io">fable</a></li>
           <li><a href="http://fsharp.org">fsharp.org</a></li>
         </ul>
-        <h3 class="muted"><a href="https://fable-elmish.github.io/hmr/index.html">elmish-hmr</a></h3>
+        <h3 class="muted"><a href="file://C:\Users\mange\Workspace\Github\fable-elmish\hmr\docs\tools\../output/index.html">elmish-hmr</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -34,7 +34,7 @@
 <h1><a name="Hot-Module-Replacement" class="anchor" href="#Hot-Module-Replacement">Hot Module Replacement</a></h1>
 <p>Elmish applications can benefit from Hot Module Replacement (known as HMR).</p>
 <p>This allow us to modify the application while it's running, without a full reload. Your application will now maintain its state between two changes.</p>
-<p><img src="https://github.com/zalmoxisus/remotedev/raw/master/docs/files/img/hmr_demo.gif" alt="hmr demo" /></p>
+<p><img src="https://fable-elmish.github.io/hmr/img/hmr_demo.gif" alt="hmr demo" /></p>
 <h3><a name="Installation" class="anchor" href="#Installation">Installation</a></h3>
 <p>Add Fable package with paket:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
@@ -43,7 +43,7 @@
 </code></pre></td></tr></table>
 <h3><a name="Program-module-functions" class="anchor" href="#Program-module-functions">Program module functions</a></h3>
 <p>Augment your program instance with HMR support.</p>
-<p>If you are using Elmish with react, make sure to add the HMR support before <code>withReact</code> line.</p>
+<p>Make sure to add HMR support before <code>Program.withReact</code> or <code>Program.withReactNative</code></p>
 <p>Usage:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -56,7 +56,24 @@
 
 <span class="i">Program</span><span class="o">.</span><span class="i">mkProgram</span> <span class="i">init</span> <span class="i">update</span> <span class="i">view</span>
 <span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withHMR</span> <span class="c">// Add the HMR support</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withReact</span> <span class="s">&quot;elmsih-app&quot;</span>
+<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withReact</span> <span class="s">&quot;elmish-app&quot;</span>
+<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">run</span>
+</code></pre></td>
+</tr>
+</table>
+<p>and if you use React Native:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">Elmish</span><span class="o">.</span><span class="i">HMR</span>
+
+<span class="i">Program</span><span class="o">.</span><span class="i">mkProgram</span> <span class="i">init</span> <span class="i">update</span> <span class="i">view</span>
+<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withHMR</span> <span class="c">// Add the HMR support</span>
+<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withReactNative</span> <span class="s">&quot;elmish-app&quot;</span>
 <span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">run</span>
 </code></pre></td>
 </tr>
@@ -67,12 +84,12 @@
 
         </div>
         <div class="span3">
-          <img src="https://fable-elmish.github.io/hmr/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
+          <img src="file://C:\Users\mange\Workspace\Github\fable-elmish\hmr\docs\tools\../output/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">elmish-hmr</li>
             <li><a href="https://github.com/fable-elmish/hmr">Source Code on GitHub</a></li>
             <li class="nav-header">Modules</li>
-            <li><a href="https://fable-elmish.github.io/hmr/hmr.html">HMR</a></li>
+            <li><a href="file://C:\Users\mange\Workspace\Github\fable-elmish\hmr\docs\tools\../output/hmr.html">HMR</a></li>
           </ul>
         </div>
       </div>
