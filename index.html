@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Hot Module Replacement
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Hot Module Replacement integration for Elmish apps"/>
+    <meta name="author" content="Maxime Mangel"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="https://fable-elmish.github.io/hmr/content/style_light.css" />
+    <script type="text/javascript" src="https://fable-elmish.github.io/hmr/content/tips.js"></script>
+    <style>span.l { display: none }</style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="https://fable-elmish.github.io">fable-elmish</a></li>
+          <li><a href="http://fable.io">fable</a></li>
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+        </ul>
+        <h3 class="muted"><a href="https://fable-elmish.github.io/hmr/index.html">elmish-hmr</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1><a name="Hot-Module-Replacement" class="anchor" href="#Hot-Module-Replacement">Hot Module Replacement</a></h1>
+<p>Elmish applications can benefit from Hot Module Replacement (known as HMR).</p>
+<p>This allow us to modify the application while it's running, without a full reload. Your application will now maintain its state between two changes.</p>
+<p><img src="https://github.com/zalmoxisus/remotedev/raw/master/docs/files/img/hmr_demo.gif" alt="hmr demo" /></p>
+<h3><a name="Installation" class="anchor" href="#Installation">Installation</a></h3>
+<p>Add Fable package with paket:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="shell">paket add nuget Fable.Elmish.HMR
+</code></pre></td></tr></table>
+<h3><a name="Program-module-functions" class="anchor" href="#Program-module-functions">Program module functions</a></h3>
+<p>Augment your program instance with HMR support.</p>
+<p>If you are using Elmish with react, make sure to add the HMR support before <code>withReact</code> line.</p>
+<p>Usage:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">Elmish</span><span class="o">.</span><span class="i">HMR</span>
+
+<span class="i">Program</span><span class="o">.</span><span class="i">mkProgram</span> <span class="i">init</span> <span class="i">update</span> <span class="i">view</span>
+<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withHMR</span> <span class="c">// Add the HMR support</span>
+<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withReact</span> <span class="s">&quot;elmsih-app&quot;</span>
+<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">run</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Conditional-compilation" class="anchor" href="#Conditional-compilation">Conditional compilation</a></h3>
+<p>If don't want to include the debugger in production builds surround it with <code>#if DEBUG</code>/<code>#endif</code> and define the symbol conditionally in your build system.</p>
+
+
+        </div>
+        <div class="span3">
+          <img src="https://fable-elmish.github.io/hmr/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">elmish-hmr</li>
+            <li><a href="https://github.com/fable-elmish/hmr">Source Code on GitHub</a></li>
+            <li class="nav-header">Modules</li>
+            <li><a href="https://fable-elmish.github.io/hmr/hmr.html">HMR</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+  </html>
