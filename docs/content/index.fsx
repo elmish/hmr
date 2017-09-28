@@ -24,7 +24,7 @@ paket add nuget Fable.Elmish.HMR
 ### Program module functions
 Augment your program instance with HMR support.
 
-Make sure to add HMR support before `Program.withReact` or `Program.withReactNative`
+Make sure to add HMR support before `Program.withReact` or `Program.withReactNative` line.
 
 Usage:
 *)
