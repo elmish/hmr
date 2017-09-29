@@ -82,6 +82,6 @@ Program.mkProgram init update view
 
 (**
 ### Conditional compilation
-If don't want to include the debugger in production builds surround it with `#if DEBUG`/`#endif` and define the symbol conditionally in your build system.
+If don't want to include the Hot Moduple Replacement in production builds surround it with `#if DEBUG`/`#endif` and define the symbol conditionally in your build system.
 
 *)

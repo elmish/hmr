@@ -5,7 +5,7 @@ Elmish-HMR: [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-
 [![Mono/OSX build](https://travis-ci.org/fable-elmish/hmr.svg?branch=master)](https://travis-ci.org/fable-elmish/hmr)
 [![NuGet version](https://badge.fury.io/nu/Fable.Elmish.HMR.svg)](https://badge.fury.io/nu/Fable.Elmish.HMR)
 
-For more information see [the docs](https://fable-elmish.github.io/debugger).
+For more information see [the docs](https://fable-elmish.github.io/hmr).
 
 ## Installation
 ```shell
