@@ -51,9 +51,10 @@ plugins : isProduction ? [] : [
 You can find a complete `webpack.config.js` [here](https://github.com/fable-elmish/templates/blob/master/src/react-demo/Content/webpack.config.js).
 
 ### Program module functions
+
 Augment your program instance with HMR support.
 
-Make sure to add HMR support before `Program.withReact` or `Program.withReactNative` line.
+*IMPORTANT*: Make sure to add HMR support before `Program.withReact` or `Program.withReactNative` line.
 
 Usage:
 *)
