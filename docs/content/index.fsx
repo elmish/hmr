@@ -21,6 +21,35 @@ Add Fable package with paket:
 paket add nuget Fable.Elmish.HMR
 ```
 
+### Webpack configuration
+
+Add `hot: true` and `inline: true` to your `devServer` node.
+
+Example:
+```js
+devServer: {
+    contentBase: resolve('./public'),
+    port: 8080,
+    hot: true,
+    inline: true
+}
+```
+
+You also need to add this two plugins when building in development mode:
+
+- `webpack.HotModuleReplacementPlugin`
+- `webpack.NamedModulesPlugin`
+
+Example:
+```js
+plugins : isProduction ? [] : [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin()
+]
+```
+
+You can find a complete `webpack.config.js` [here](https://github.com/fable-elmish/templates/blob/master/src/react-demo/Content/webpack.config.js).
+
 ### Program module functions
 Augment your program instance with HMR support.
 
