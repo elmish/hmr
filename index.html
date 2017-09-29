@@ -41,6 +41,40 @@
 </pre></td>
 <td class="snippet"><pre class="fssnip"><code lang="shell">paket add nuget Fable.Elmish.HMR
 </code></pre></td></tr></table>
+<h3><a name="Webpack-configuration" class="anchor" href="#Webpack-configuration">Webpack configuration</a></h3>
+<p>Add <code>hot: true</code> and <code>inline: true</code> to your <code>devServer</code> node.</p>
+<p>Example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="js">devServer: {
+    contentBase: resolve(<span class="s">'./public'</span>),
+    port: <span class="n">8080</span>,
+    hot: <span class="k">true</span>,
+    inline: <span class="k">true</span>
+}
+</code></pre></td></tr></table>
+<p>You also need to add this two plugins when building in development mode:</p>
+<ul>
+<li><code>webpack.HotModuleReplacementPlugin</code></li>
+<li><code>webpack.NamedModulesPlugin</code></li>
+</ul>
+<p>Example:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="js">plugins : isProduction ? [] : [
+    <span class="k">new</span> webpack.HotModuleReplacementPlugin(),
+    <span class="k">new</span> webpack.NamedModulesPlugin()
+]
+</code></pre></td></tr></table>
+<p>You can find a complete <code>webpack.config.js</code> <a href="https://github.com/fable-elmish/templates/blob/master/src/react-demo/Content/webpack.config.js">here</a>.</p>
 <h3><a name="Program-module-functions" class="anchor" href="#Program-module-functions">Program module functions</a></h3>
 <p>Augment your program instance with HMR support.</p>
 <p>Make sure to add HMR support before <code>Program.withReact</code> or <code>Program.withReactNative</code> line.</p>
