@@ -15,7 +15,7 @@ let projects  =
       !! "src/**.fsproj"
 
 
-let dotnetcliVersion = "2.0.0"
+let dotnetcliVersion = DotNetCli.GetDotNetSDKVersionFromGlobalJson()
 let mutable dotnetExePath = "dotnet"
 
 let runDotnet workingDir =
