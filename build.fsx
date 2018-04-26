@@ -48,10 +48,10 @@ Target "Meta" (fun _ ->
     [ "<Project xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">"
       "<PropertyGroup>"
       "<Description>Hot Module Replacement for Elmish apps</Description>"
-      "<PackageProjectUrl>https://github.com/fable-elmish/hmr</PackageProjectUrl>"
-      "<PackageLicenseUrl>https://raw.githubusercontent.com/fable-elmish/hmr/master/LICENSE.md</PackageLicenseUrl>"
-      "<PackageIconUrl>https://raw.githubusercontent.com/fable-elmish/hmr/master/docs/files/img/logo.png</PackageIconUrl>"
-      "<RepositoryUrl>https://github.com/fable-elmish/hmr.git</RepositoryUrl>"
+      "<PackageProjectUrl>https://github.com/elmish/hmr</PackageProjectUrl>"
+      "<PackageLicenseUrl>https://raw.githubusercontent.com/elmish/hmr/master/LICENSE.md</PackageLicenseUrl>"
+      "<PackageIconUrl>https://raw.githubusercontent.com/elmish/hmr/master/docs/files/img/logo.png</PackageIconUrl>"
+      "<RepositoryUrl>https://github.com/elmish/hmr.git</RepositoryUrl>"
       "<PackageTags>fable;elmish;fsharp;hmr</PackageTags>"
       "<Authors>Maxime Mangel</Authors>"
       sprintf "<Version>%s</Version>" (string release.SemVer)
@@ -76,7 +76,7 @@ Target "PublishNuget" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Generate the documentation
 let gitName = "hmr"
-let gitOwner = "fable-elmish"
+let gitOwner = "elmish"
 let gitHome = sprintf "https://github.com/%s" gitOwner
 
 let fakePath = "packages" </> "build" </> "FAKE" </> "tools" </> "FAKE.exe"

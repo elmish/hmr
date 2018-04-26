@@ -4,9 +4,9 @@
 // --------------------------------------------------------------------------------------
 
 // Web site location for the generated documentation
-let website = "https://fable-elmish.github.io/hmr"
+let website = "https://elmish.github.io/hmr"
 
-let githubLink = "https://github.com/fable-elmish/hmr"
+let githubLink = "https://github.com/elmish/hmr"
 
 // Specify more information about your project
 let info =

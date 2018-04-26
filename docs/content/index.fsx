@@ -11,7 +11,7 @@ Elmish applications can benefit from Hot Module Replacement (known as HMR).
 
 This allow us to modify the application while it's running, without a full reload. Your application will now maintain its state between two changes.
 
-![hmr demo](https://fable-elmish.github.io/hmr/img/hmr_demo.gif)
+![hmr demo](https://elmish.github.io/hmr/img/hmr_demo.gif)
 
 
 ### Installation
@@ -48,7 +48,7 @@ plugins : isProduction ? [] : [
 ]
 ```
 
-You can find a complete `webpack.config.js` [here](https://github.com/fable-elmish/templates/blob/master/src/react-demo/Content/webpack.config.js).
+You can find a complete `webpack.config.js` [here](https://github.com/elmish/templates/blob/master/src/react-demo/Content/webpack.config.js).
 
 ### Program module functions
 
