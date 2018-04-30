@@ -57,7 +57,7 @@ Target "Meta" (fun _ ->
       sprintf "<Version>%s</Version>" (string release.SemVer)
       "</PropertyGroup>"
       "</Project>"]
-    |> WriteToFile false "Meta.props"
+    |> WriteToFile false "Directory.Build.props"
 )
 
 // --------------------------------------------------------------------------------------

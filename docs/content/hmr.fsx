@@ -1,4 +1,4 @@
-(*** hide ***)
+﻿(*** hide ***)
 #I "../../src/bin/Debug/netstandard1.6"
 #r "Fable.Core.dll"
 #r "Fable.Elmish.dll"
