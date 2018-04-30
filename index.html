@@ -13,19 +13,19 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="https://fable-elmish.github.io/hmr/content/style_light.css" />
-    <script type="text/javascript" src="https://fable-elmish.github.io/hmr/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://elmish.github.io/hmr/content/style_light.css" />
+    <script type="text/javascript" src="https://elmish.github.io/hmr/content/tips.js"></script>
     <style>span.l { display: none }</style>
   </head>
   <body>
     <div class="container">
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li><a href="https://fable-elmish.github.io">fable-elmish</a></li>
+          <li><a href="https://elmish.github.io">elmish</a></li>
           <li><a href="http://fable.io">fable</a></li>
           <li><a href="http://fsharp.org">fsharp.org</a></li>
         </ul>
-        <h3 class="muted"><a href="https://fable-elmish.github.io/hmr/index.html">elmish-hmr</a></h3>
+        <h3 class="muted"><a href="https://elmish.github.io/hmr/index.html">elmish-hmr</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -34,7 +34,7 @@
 <h1><a name="Hot-Module-Replacement" class="anchor" href="#Hot-Module-Replacement">Hot Module Replacement</a></h1>
 <p>Elmish applications can benefit from Hot Module Replacement (known as HMR).</p>
 <p>This allow us to modify the application while it's running, without a full reload. Your application will now maintain its state between two changes.</p>
-<p><img src="https://fable-elmish.github.io/hmr/img/hmr_demo.gif" alt="hmr demo" /></p>
+<p><img src="https://elmish.github.io/hmr/img/hmr_demo.gif" alt="hmr demo" /></p>
 <h3><a name="Installation" class="anchor" href="#Installation">Installation</a></h3>
 <p>Add Fable package with paket:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
@@ -74,7 +74,7 @@
     <span class="k">new</span> webpack.NamedModulesPlugin()
 ]
 </code></pre></td></tr></table>
-<p>You can find a complete <code>webpack.config.js</code> <a href="https://github.com/fable-elmish/templates/blob/master/src/react-demo/Content/webpack.config.js">here</a>.</p>
+<p>You can find a complete <code>webpack.config.js</code> <a href="https://github.com/elmish/templates/blob/master/src/react-demo/Content/webpack.config.js">here</a>.</p>
 <h3><a name="Program-module-functions" class="anchor" href="#Program-module-functions">Program module functions</a></h3>
 <p>Augment your program instance with HMR support.</p>
 <p><em>IMPORTANT</em>: Make sure to add HMR support before <code>Program.withReact</code> or <code>Program.withReactNative</code> line.</p>
@@ -86,12 +86,12 @@
 <span class="l">5: </span>
 <span class="l">6: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">Elmish</span><span class="o">.</span><span class="i">HMR</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">Elmish</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">HMR</span>
 
-<span class="i">Program</span><span class="o">.</span><span class="i">mkProgram</span> <span class="i">init</span> <span class="i">update</span> <span class="i">view</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withHMR</span> <span class="c">// Add the HMR support</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withReact</span> <span class="s">&quot;elmish-app&quot;</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">run</span>
+<span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="i">Program</span><span class="o">.</span><span class="i">mkProgram</span> <span class="i">init</span> <span class="i">update</span> <span class="i">view</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="t">Program</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="f">withHMR</span> <span class="c">// Add the HMR support</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 7)" onmouseover="showTip(event, 'fs3', 7)" class="i">Program</span><span class="o">.</span><span class="i">withReact</span> <span class="s">&quot;elmish-app&quot;</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 8)" onmouseover="showTip(event, 'fs3', 8)" class="i">Program</span><span class="o">.</span><span class="i">run</span>
 </code></pre></td>
 </tr>
 </table>
@@ -103,27 +103,31 @@
 <span class="l">5: </span>
 <span class="l">6: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">Elmish</span><span class="o">.</span><span class="i">HMR</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 9)" onmouseover="showTip(event, 'fs1', 9)" class="i">Elmish</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 10)" onmouseover="showTip(event, 'fs2', 10)" class="i">HMR</span>
 
-<span class="i">Program</span><span class="o">.</span><span class="i">mkProgram</span> <span class="i">init</span> <span class="i">update</span> <span class="i">view</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withHMR</span> <span class="c">// Add the HMR support</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">withReactNative</span> <span class="s">&quot;elmish-app&quot;</span>
-<span class="o">|&gt;</span> <span class="i">Program</span><span class="o">.</span><span class="i">run</span>
+<span onmouseout="hideTip(event, 'fs3', 11)" onmouseover="showTip(event, 'fs3', 11)" class="i">Program</span><span class="o">.</span><span class="i">mkProgram</span> <span class="i">init</span> <span class="i">update</span> <span class="i">view</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 12)" onmouseover="showTip(event, 'fs3', 12)" class="t">Program</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 13)" onmouseover="showTip(event, 'fs4', 13)" class="f">withHMR</span> <span class="c">// Add the HMR support</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 14)" onmouseover="showTip(event, 'fs3', 14)" class="i">Program</span><span class="o">.</span><span class="i">withReactNative</span> <span class="s">&quot;elmish-app&quot;</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 15)" onmouseover="showTip(event, 'fs3', 15)" class="i">Program</span><span class="o">.</span><span class="i">run</span>
 </code></pre></td>
 </tr>
 </table>
 <h3><a name="Conditional-compilation" class="anchor" href="#Conditional-compilation">Conditional compilation</a></h3>
 <p>If don't want to include the Hot Moduple Replacement in production builds surround it with <code>#if DEBUG</code>/<code>#endif</code> and define the symbol conditionally in your build system.</p>
 
+<div class="tip" id="fs1">namespace Elmish</div>
+<div class="tip" id="fs2">namespace Elmish.HMR</div>
+<div class="tip" id="fs3">module Program<br /><br />from Elmish.HMR</div>
+<div class="tip" id="fs4"></div>
 
         </div>
         <div class="span3">
-          <img src="https://fable-elmish.github.io/hmr/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
+          <img src="https://elmish.github.io/hmr/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">elmish-hmr</li>
-            <li><a href="https://github.com/fable-elmish/hmr">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/elmish/hmr">Source Code on GitHub</a></li>
             <li class="nav-header">Modules</li>
-            <li><a href="https://fable-elmish.github.io/hmr/hmr.html">HMR</a></li>
+            <li><a href="https://elmish.github.io/hmr/hmr.html">HMR</a></li>
           </ul>
         </div>
       </div>

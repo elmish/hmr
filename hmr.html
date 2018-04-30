@@ -12,19 +12,19 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="https://fable-elmish.github.io/hmr/content/style_light.css" />
-    <script type="text/javascript" src="https://fable-elmish.github.io/hmr/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://elmish.github.io/hmr/content/style_light.css" />
+    <script type="text/javascript" src="https://elmish.github.io/hmr/content/tips.js"></script>
     <style>span.l { display: none }</style>
   </head>
   <body>
     <div class="container">
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li><a href="https://fable-elmish.github.io">fable-elmish</a></li>
+          <li><a href="https://elmish.github.io">elmish</a></li>
           <li><a href="http://fable.io">fable</a></li>
           <li><a href="http://fsharp.org">fsharp.org</a></li>
         </ul>
-        <h3 class="muted"><a href="https://fable-elmish.github.io/hmr/index.html">elmish-hmr</a></h3>
+        <h3 class="muted"><a href="https://elmish.github.io/hmr/index.html">elmish-hmr</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -98,82 +98,119 @@
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">namespace</span> <span class="i">Elmish</span><span class="o">.</span><span class="i">HMR</span>
 
-<span class="k">open</span> <span class="i">Elmish</span>
-<span class="k">open</span> <span class="i">Fable</span><span class="o">.</span><span class="i">Core</span>
-<span class="k">open</span> <span class="i">Fable</span><span class="o">.</span><span class="i">Core</span><span class="o">.</span><span class="i">JsInterop</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Elmish</span>
+<span class="k">open</span> <span class="i">Fable</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">Core</span>
+<span class="k">open</span> <span class="i">Fable</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">Core</span><span class="o">.</span><span class="i">JsInterop</span>
 
-[&lt;<span class="i">RequireQualifiedAccess</span>&gt;]
-<span class="k">module</span> <span class="i">Program</span> <span class="o">=</span>
+[&lt;<span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="t">RequireQualifiedAccess</span>&gt;]
+<span class="k">module</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="t">Program</span> <span class="o">=</span>
 
-    <span class="k">type</span> <span class="i">IModule</span> <span class="o">=</span>
-        <span class="k">abstract</span> <span class="i">hot</span><span class="o">:</span> <span class="i">obj</span> <span class="k">with</span> <span class="i">get</span>, <span class="i">set</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="t">IModule</span> <span class="o">=</span>
+        <span class="k">abstract</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="i">hot</span><span class="o">:</span> <span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="t">obj</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="i">set</span>
 
-    <span class="k">let</span> [&lt;<span class="i">Global</span>&gt;] [&lt;<span class="i">Emit</span>(<span class="s">&quot;module&quot;</span>)&gt;] <span class="i">``module``</span> <span class="o">:</span> <span class="i">IModule</span> <span class="o">=</span> <span class="i">jsNative</span>
+    <span class="k">let</span> [&lt;<span class="i">Global</span>&gt;] [&lt;<span class="i">Emit</span>(<span class="s">&quot;module&quot;</span>)&gt;] <span class="i">``module``</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="t">IModule</span> <span class="o">=</span> <span class="i">jsNative</span>
 
-    <span class="k">type</span> <span class="i">HMRMsg</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">msg</span><span class="o">&gt;</span> <span class="o">=</span>
-        | <span class="i">UserMsg</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">msg</span>
-        | <span class="i">Reload</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="t">HMRMsg</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">msg</span><span class="o">&gt;</span> <span class="o">=</span>
+        | <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="p">UserMsg</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">msg</span>
+        | <span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="p">Reload</span>
 
-    <span class="k">type</span> <span class="i">HMRModel</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">model</span><span class="o">&gt;</span> <span class="o">=</span>
-        { <span class="i">HMRCount</span> <span class="o">:</span> <span class="i">int</span>
-          <span class="i">UserModel</span> <span class="o">:</span> <span class="o">&#39;</span><span class="i">model</span> }
+    <span class="k">type</span> <span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="t">HMRModel</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">model</span><span class="o">&gt;</span> <span class="o">=</span>
+        { <span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="i">HMRCount</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="t">int</span>
+          <span onmouseout="hideTip(event, 'fs15', 17)" onmouseover="showTip(event, 'fs15', 17)" class="i">UserModel</span> <span class="o">:</span> <span class="o">&#39;</span><span class="i">model</span> }
 
-    <span class="k">let</span> <span class="k">mutable</span> <span class="i">hmrState</span> <span class="o">:</span> <span class="i">obj</span> <span class="o">=</span> <span class="k">null</span>
+    <span class="k">let</span> <span class="k">mutable</span> <span onmouseout="hideTip(event, 'fs16', 18)" onmouseover="showTip(event, 'fs16', 18)" class="v">hmrState</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs7', 19)" onmouseover="showTip(event, 'fs7', 19)" class="t">obj</span> <span class="o">=</span> <span class="k">null</span>
 
-    <span class="k">let</span> <span class="k">inline</span> <span class="i">withHMR</span> (<span class="i">program</span><span class="o">:</span><span class="i">Elmish</span><span class="o">.</span><span class="i">Program</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">arg</span>, <span class="o">&#39;</span><span class="i">model</span>, <span class="o">&#39;</span><span class="i">msg</span>, <span class="o">&#39;</span><span class="i">view</span><span class="o">&gt;</span>) <span class="o">=</span>
+    <span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs17', 20)" onmouseover="showTip(event, 'fs17', 20)" class="f">withHMR</span> (<span onmouseout="hideTip(event, 'fs18', 21)" onmouseover="showTip(event, 'fs18', 21)" class="i">program</span><span class="o">:</span><span class="i">Elmish</span><span class="o">.</span><span class="i">Program</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">arg</span>, <span class="o">&#39;</span><span class="i">model</span>, <span class="o">&#39;</span><span class="i">msg</span>, <span class="o">&#39;</span><span class="i">view</span><span class="o">&gt;</span>) <span class="o">=</span>
 
-        <span class="k">if</span> <span class="i">not</span> (<span class="i">isNull</span> <span class="i">``module``</span><span class="o">.</span><span class="i">hot</span>) <span class="k">then</span>
-            <span class="i">``module``</span><span class="o">.</span><span class="i">hot</span><span class="o">?</span><span class="i">accept</span>() <span class="o">|&gt;</span> <span class="i">ignore</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, 'fs19', 22)" onmouseover="showTip(event, 'fs19', 22)" class="f">not</span> (<span onmouseout="hideTip(event, 'fs20', 23)" onmouseover="showTip(event, 'fs20', 23)" class="f">isNull</span> <span class="i">``module``</span><span class="o">.</span><span class="i">hot</span>) <span class="k">then</span>
+            <span class="i">``module``</span><span class="o">.</span><span class="i">hot</span><span class="o">?</span><span class="i">accept</span>() <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs21', 24)" onmouseover="showTip(event, 'fs21', 24)" class="f">ignore</span>
 
-        <span class="k">let</span> <span class="i">map</span> (<span class="i">model</span>, <span class="i">cmd</span>) <span class="o">=</span>
-            <span class="i">model</span>, <span class="i">cmd</span> <span class="o">|&gt;</span> <span class="i">Cmd</span><span class="o">.</span><span class="i">map</span> <span class="i">UserMsg</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 25)" onmouseover="showTip(event, 'fs22', 25)" class="f">map</span> (<span onmouseout="hideTip(event, 'fs23', 26)" onmouseover="showTip(event, 'fs23', 26)" class="i">model</span>, <span onmouseout="hideTip(event, 'fs24', 27)" onmouseover="showTip(event, 'fs24', 27)" class="i">cmd</span>) <span class="o">=</span>
+            <span onmouseout="hideTip(event, 'fs23', 28)" onmouseover="showTip(event, 'fs23', 28)" class="i">model</span>, <span onmouseout="hideTip(event, 'fs24', 29)" onmouseover="showTip(event, 'fs24', 29)" class="i">cmd</span> <span class="o">|&gt;</span> <span class="i">Cmd</span><span class="o">.</span><span class="i">map</span> <span onmouseout="hideTip(event, 'fs10', 30)" onmouseover="showTip(event, 'fs10', 30)" class="i">UserMsg</span>
 
-        <span class="k">let</span> <span class="i">update</span> <span class="i">msg</span> <span class="i">model</span> <span class="o">=</span>
-            <span class="k">let</span> <span class="i">newModel</span>,<span class="i">cmd</span> <span class="o">=</span>
-                <span class="k">match</span> <span class="i">msg</span> <span class="k">with</span>
-                | <span class="i">UserMsg</span> <span class="i">msg</span> <span class="k">-&gt;</span>
-                    <span class="k">let</span> <span class="i">newModel</span>, <span class="i">cmd</span> <span class="o">=</span> <span class="i">program</span><span class="o">.</span><span class="i">update</span> <span class="i">msg</span> <span class="i">model</span><span class="o">.</span><span class="i">UserModel</span>
-                    { <span class="i">model</span> <span class="k">with</span> <span class="i">UserModel</span> <span class="o">=</span> <span class="i">newModel</span> }, <span class="i">cmd</span>
-                | <span class="i">Reload</span> <span class="k">-&gt;</span>
-                    { <span class="i">model</span> <span class="k">with</span> <span class="i">HMRCount</span> <span class="o">=</span> <span class="i">model</span><span class="o">.</span><span class="i">HMRCount</span> <span class="o">+</span> <span class="n">1</span> }, <span class="i">Cmd</span><span class="o">.</span><span class="i">none</span>
-                <span class="o">|&gt;</span> <span class="i">map</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 31)" onmouseover="showTip(event, 'fs25', 31)" class="f">update</span> <span onmouseout="hideTip(event, 'fs26', 32)" onmouseover="showTip(event, 'fs26', 32)" class="i">msg</span> <span onmouseout="hideTip(event, 'fs27', 33)" onmouseover="showTip(event, 'fs27', 33)" class="i">model</span> <span class="o">=</span>
+            <span class="k">let</span> <span onmouseout="hideTip(event, 'fs28', 34)" onmouseover="showTip(event, 'fs28', 34)" class="i">newModel</span>,<span onmouseout="hideTip(event, 'fs29', 35)" onmouseover="showTip(event, 'fs29', 35)" class="i">cmd</span> <span class="o">=</span>
+                <span class="k">match</span> <span onmouseout="hideTip(event, 'fs26', 36)" onmouseover="showTip(event, 'fs26', 36)" class="i">msg</span> <span class="k">with</span>
+                | <span onmouseout="hideTip(event, 'fs10', 37)" onmouseover="showTip(event, 'fs10', 37)" class="p">UserMsg</span> <span onmouseout="hideTip(event, 'fs30', 38)" onmouseover="showTip(event, 'fs30', 38)" class="i">msg</span> <span class="k">-&gt;</span>
+                    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs31', 39)" onmouseover="showTip(event, 'fs31', 39)" class="i">newModel</span>, <span onmouseout="hideTip(event, 'fs32', 40)" onmouseover="showTip(event, 'fs32', 40)" class="i">cmd</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs18', 41)" onmouseover="showTip(event, 'fs18', 41)" class="i">program</span><span class="o">.</span><span class="i">update</span> <span onmouseout="hideTip(event, 'fs30', 42)" onmouseover="showTip(event, 'fs30', 42)" class="i">msg</span> <span onmouseout="hideTip(event, 'fs27', 43)" onmouseover="showTip(event, 'fs27', 43)" class="i">model</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs33', 44)" onmouseover="showTip(event, 'fs33', 44)" class="i">UserModel</span>
+                    { <span onmouseout="hideTip(event, 'fs27', 45)" onmouseover="showTip(event, 'fs27', 45)" class="i">model</span> <span class="k">with</span> <span class="i">UserModel</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs31', 46)" onmouseover="showTip(event, 'fs31', 46)" class="i">newModel</span> }, <span onmouseout="hideTip(event, 'fs32', 47)" onmouseover="showTip(event, 'fs32', 47)" class="i">cmd</span>
+                | <span onmouseout="hideTip(event, 'fs11', 48)" onmouseover="showTip(event, 'fs11', 48)" class="p">Reload</span> <span class="k">-&gt;</span>
+                    { <span onmouseout="hideTip(event, 'fs27', 49)" onmouseover="showTip(event, 'fs27', 49)" class="i">model</span> <span class="k">with</span> <span class="i">HMRCount</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs27', 50)" onmouseover="showTip(event, 'fs27', 50)" class="i">model</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 51)" onmouseover="showTip(event, 'fs13', 51)" class="i">HMRCount</span> <span class="o">+</span> <span class="n">1</span> }, <span class="i">Cmd</span><span class="o">.</span><span class="i">none</span>
+                <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs22', 52)" onmouseover="showTip(event, 'fs22', 52)" class="f">map</span>
 
-            <span class="i">hmrState</span> <span class="o">&lt;-</span> <span class="i">newModel</span>
+            <span onmouseout="hideTip(event, 'fs16', 53)" onmouseover="showTip(event, 'fs16', 53)" class="v">hmrState</span> <span class="o">&lt;-</span> <span onmouseout="hideTip(event, 'fs28', 54)" onmouseover="showTip(event, 'fs28', 54)" class="i">newModel</span>
             <span class="c">// Store the state</span>
-            <span class="i">newModel</span>, <span class="i">cmd</span>
+            <span onmouseout="hideTip(event, 'fs28', 55)" onmouseover="showTip(event, 'fs28', 55)" class="i">newModel</span>, <span onmouseout="hideTip(event, 'fs29', 56)" onmouseover="showTip(event, 'fs29', 56)" class="i">cmd</span>
 
-        <span class="k">let</span> <span class="i">createModel</span> (<span class="i">model</span>, <span class="i">cmd</span>) <span class="o">=</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs34', 57)" onmouseover="showTip(event, 'fs34', 57)" class="f">createModel</span> (<span onmouseout="hideTip(event, 'fs23', 58)" onmouseover="showTip(event, 'fs23', 58)" class="i">model</span>, <span onmouseout="hideTip(event, 'fs24', 59)" onmouseover="showTip(event, 'fs24', 59)" class="i">cmd</span>) <span class="o">=</span>
             { <span class="i">HMRCount</span> <span class="o">=</span> <span class="n">0</span>
-              <span class="i">UserModel</span> <span class="o">=</span> <span class="i">model</span> }, <span class="i">cmd</span>
+              <span class="i">UserModel</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 60)" onmouseover="showTip(event, 'fs23', 60)" class="i">model</span> }, <span onmouseout="hideTip(event, 'fs24', 61)" onmouseover="showTip(event, 'fs24', 61)" class="i">cmd</span>
 
-        <span class="k">let</span> <span class="i">init</span> <span class="o">=</span>
-            <span class="k">if</span> <span class="i">isNull</span> <span class="i">hmrState</span> <span class="k">then</span>
-                <span class="i">program</span><span class="o">.</span><span class="i">init</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">map</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">createModel</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs35', 62)" onmouseover="showTip(event, 'fs35', 62)" class="f">init</span> <span class="o">=</span>
+            <span class="k">if</span> <span onmouseout="hideTip(event, 'fs20', 63)" onmouseover="showTip(event, 'fs20', 63)" class="f">isNull</span> <span onmouseout="hideTip(event, 'fs16', 64)" onmouseover="showTip(event, 'fs16', 64)" class="v">hmrState</span> <span class="k">then</span>
+                <span onmouseout="hideTip(event, 'fs18', 65)" onmouseover="showTip(event, 'fs18', 65)" class="i">program</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs35', 66)" onmouseover="showTip(event, 'fs35', 66)" class="i">init</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span onmouseout="hideTip(event, 'fs22', 67)" onmouseover="showTip(event, 'fs22', 67)" class="f">map</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span onmouseout="hideTip(event, 'fs34', 68)" onmouseover="showTip(event, 'fs34', 68)" class="f">createModel</span>
             <span class="k">else</span>
-                (<span class="k">fun</span> _ <span class="k">-&gt;</span> <span class="i">unbox</span><span class="o">&lt;</span><span class="i">HMRModel</span><span class="o">&lt;</span>_<span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">hmrState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">ofMsg</span> <span class="i">Reload</span> )
+                (<span class="k">fun</span> _ <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs36', 69)" onmouseover="showTip(event, 'fs36', 69)" class="f">unbox</span><span class="o">&lt;</span><span onmouseout="hideTip(event, 'fs12', 70)" onmouseover="showTip(event, 'fs12', 70)" class="t">HMRModel</span><span class="o">&lt;</span>_<span class="o">&gt;</span><span class="o">&gt;</span> <span onmouseout="hideTip(event, 'fs16', 71)" onmouseover="showTip(event, 'fs16', 71)" class="v">hmrState</span>, <span class="i">Cmd</span><span class="o">.</span><span class="i">ofMsg</span> <span onmouseout="hideTip(event, 'fs11', 72)" onmouseover="showTip(event, 'fs11', 72)" class="i">Reload</span> )
 
-        <span class="k">let</span> <span class="i">subs</span> <span class="i">model</span> <span class="o">=</span>
-            <span class="i">Cmd</span><span class="o">.</span><span class="i">batch</span> [ <span class="i">program</span><span class="o">.</span><span class="i">subscribe</span> <span class="i">model</span><span class="o">.</span><span class="i">UserModel</span> <span class="o">|&gt;</span> <span class="i">Cmd</span><span class="o">.</span><span class="i">map</span> <span class="i">UserMsg</span> ]
+        <span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 73)" onmouseover="showTip(event, 'fs37', 73)" class="f">subs</span> <span onmouseout="hideTip(event, 'fs23', 74)" onmouseover="showTip(event, 'fs23', 74)" class="i">model</span> <span class="o">=</span>
+            <span class="i">Cmd</span><span class="o">.</span><span class="i">batch</span> [ <span onmouseout="hideTip(event, 'fs18', 75)" onmouseover="showTip(event, 'fs18', 75)" class="i">program</span><span class="o">.</span><span class="i">subscribe</span> <span onmouseout="hideTip(event, 'fs23', 76)" onmouseover="showTip(event, 'fs23', 76)" class="i">model</span><span class="o">.</span><span class="i">UserModel</span> <span class="o">|&gt;</span> <span class="i">Cmd</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs22', 77)" onmouseover="showTip(event, 'fs22', 77)" class="i">map</span> <span onmouseout="hideTip(event, 'fs10', 78)" onmouseover="showTip(event, 'fs10', 78)" class="i">UserMsg</span> ]
 
-        { <span class="i">init</span> <span class="o">=</span> <span class="i">init</span>
-          <span class="i">update</span> <span class="o">=</span> <span class="i">update</span>
-          <span class="i">subscribe</span> <span class="o">=</span> <span class="i">subs</span>
-          <span class="i">onError</span> <span class="o">=</span> <span class="i">program</span><span class="o">.</span><span class="i">onError</span>
-          <span class="i">setState</span> <span class="o">=</span> <span class="k">fun</span> <span class="i">model</span> <span class="i">dispatch</span> <span class="k">-&gt;</span> <span class="i">program</span><span class="o">.</span><span class="i">setState</span> <span class="i">model</span><span class="o">.</span><span class="i">UserModel</span> (<span class="i">UserMsg</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">dispatch</span>)
-          <span class="i">view</span> <span class="o">=</span> <span class="k">fun</span> <span class="i">model</span> <span class="i">dispatch</span> <span class="k">-&gt;</span> <span class="i">program</span><span class="o">.</span><span class="i">view</span> <span class="i">model</span><span class="o">.</span><span class="i">UserModel</span> (<span class="i">UserMsg</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">dispatch</span>) }
+        { <span onmouseout="hideTip(event, 'fs35', 79)" onmouseover="showTip(event, 'fs35', 79)" class="i">init</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs35', 80)" onmouseover="showTip(event, 'fs35', 80)" class="i">init</span>
+          <span onmouseout="hideTip(event, 'fs25', 81)" onmouseover="showTip(event, 'fs25', 81)" class="i">update</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs25', 82)" onmouseover="showTip(event, 'fs25', 82)" class="i">update</span>
+          <span class="i">subscribe</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs37', 83)" onmouseover="showTip(event, 'fs37', 83)" class="i">subs</span>
+          <span class="i">onError</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs18', 84)" onmouseover="showTip(event, 'fs18', 84)" class="i">program</span><span class="o">.</span><span class="i">onError</span>
+          <span class="i">setState</span> <span class="o">=</span> <span class="k">fun</span> <span class="i">model</span> <span class="i">dispatch</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs18', 85)" onmouseover="showTip(event, 'fs18', 85)" class="i">program</span><span class="o">.</span><span class="i">setState</span> <span class="i">model</span><span class="o">.</span><span class="i">UserModel</span> (<span onmouseout="hideTip(event, 'fs10', 86)" onmouseover="showTip(event, 'fs10', 86)" class="i">UserMsg</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">dispatch</span>)
+          <span class="i">view</span> <span class="o">=</span> <span class="k">fun</span> <span class="i">model</span> <span class="i">dispatch</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs18', 87)" onmouseover="showTip(event, 'fs18', 87)" class="i">program</span><span class="o">.</span><span class="i">view</span> <span class="i">model</span><span class="o">.</span><span class="i">UserModel</span> (<span onmouseout="hideTip(event, 'fs10', 88)" onmouseover="showTip(event, 'fs10', 88)" class="i">UserMsg</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">dispatch</span>) }
 </code></pre></td>
 </tr>
 </table>
 
+<div class="tip" id="fs1">namespace Elmish</div>
+<div class="tip" id="fs2">namespace Microsoft.FSharp.Core</div>
+<div class="tip" id="fs3">Multiple items<br />type RequireQualifiedAccessAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; RequireQualifiedAccessAttribute<br /><br />Full name: Microsoft.FSharp.Core.RequireQualifiedAccessAttribute<br /><br />--------------------<br />new : unit -&gt; RequireQualifiedAccessAttribute</div>
+<div class="tip" id="fs4">module Program<br /><br />from Elmish.HMR</div>
+<div class="tip" id="fs5">type IModule =<br />&#160;&#160;interface<br />&#160;&#160;&#160;&#160;abstract member hot : obj<br />&#160;&#160;&#160;&#160;abstract member hot : obj with set<br />&#160;&#160;end<br /><br />Full name: Elmish.HMR.Program.IModule</div>
+<div class="tip" id="fs6">abstract member IModule.hot : obj with set<br /><br />Full name: Elmish.HMR.Program.IModule.hot</div>
+<div class="tip" id="fs7">type obj = System.Object<br /><br />Full name: Microsoft.FSharp.Core.obj</div>
+<div class="tip" id="fs8">val set : elements:seq&lt;&#39;T&gt; -&gt; Set&lt;&#39;T&gt; (requires comparison)<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.set</div>
+<div class="tip" id="fs9">type HMRMsg&lt;&#39;msg&gt; =<br />&#160;&#160;| UserMsg of &#39;msg<br />&#160;&#160;| Reload<br /><br />Full name: Elmish.HMR.Program.HMRMsg&lt;_&gt;</div>
+<div class="tip" id="fs10">union case HMRMsg.UserMsg: &#39;msg -&gt; HMRMsg&lt;&#39;msg&gt;</div>
+<div class="tip" id="fs11">union case HMRMsg.Reload: HMRMsg&lt;&#39;msg&gt;</div>
+<div class="tip" id="fs12">type HMRModel&lt;&#39;model&gt; =<br />&#160;&#160;{HMRCount: int;<br />&#160;&#160;&#160;UserModel: &#39;model;}<br /><br />Full name: Elmish.HMR.Program.HMRModel&lt;_&gt;</div>
+<div class="tip" id="fs13">HMRModel.HMRCount: int</div>
+<div class="tip" id="fs14">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />Full name: Microsoft.FSharp.Core.Operators.int<br /><br />--------------------<br />type int = int32<br /><br />Full name: Microsoft.FSharp.Core.int<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int<br /><br />Full name: Microsoft.FSharp.Core.int&lt;_&gt;</div>
+<div class="tip" id="fs15">HMRModel.UserModel: &#39;model</div>
+<div class="tip" id="fs16">val mutable hmrState : obj<br /><br />Full name: Elmish.HMR.Program.hmrState</div>
+<div class="tip" id="fs17">val withHMR : program:&#39;a -&gt; &#39;b<br /><br />Full name: Elmish.HMR.Program.withHMR</div>
+<div class="tip" id="fs18">val program : &#39;a</div>
+<div class="tip" id="fs19">val not : value:bool -&gt; bool<br /><br />Full name: Microsoft.FSharp.Core.Operators.not</div>
+<div class="tip" id="fs20">val isNull : value:&#39;T -&gt; bool (requires &#39;T : null)<br /><br />Full name: Microsoft.FSharp.Core.Operators.isNull</div>
+<div class="tip" id="fs21">val ignore : value:&#39;T -&gt; unit<br /><br />Full name: Microsoft.FSharp.Core.Operators.ignore</div>
+<div class="tip" id="fs22">val map : (&#39;c * &#39;d -&gt; &#39;c * &#39;e)</div>
+<div class="tip" id="fs23">val model : &#39;c</div>
+<div class="tip" id="fs24">val cmd : &#39;d</div>
+<div class="tip" id="fs25">val update : (HMRMsg&lt;&#39;c&gt; -&gt; HMRModel&lt;&#39;d&gt; -&gt; HMRModel&lt;&#39;d&gt; * &#39;e)</div>
+<div class="tip" id="fs26">val msg : HMRMsg&lt;&#39;c&gt;</div>
+<div class="tip" id="fs27">val model : HMRModel&lt;&#39;d&gt;</div>
+<div class="tip" id="fs28">val newModel : HMRModel&lt;&#39;d&gt;</div>
+<div class="tip" id="fs29">val cmd : &#39;e</div>
+<div class="tip" id="fs30">val msg : &#39;c</div>
+<div class="tip" id="fs31">val newModel : &#39;d</div>
+<div class="tip" id="fs32">val cmd : obj</div>
+<div class="tip" id="fs33">HMRModel.UserModel: &#39;d</div>
+<div class="tip" id="fs34">val createModel : (&#39;c * &#39;d -&gt; HMRModel&lt;&#39;c&gt; * &#39;d)</div>
+<div class="tip" id="fs35">val init : (obj -&gt; HMRModel&lt;obj&gt; * obj)</div>
+<div class="tip" id="fs36">val unbox : value:obj -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.unbox</div>
+<div class="tip" id="fs37">val subs : (&#39;c -&gt; &#39;d)</div>
 
         </div>
         <div class="span3">
-          <img src="https://fable-elmish.github.io/hmr/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
+          <img src="https://elmish.github.io/hmr/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">elmish-hmr</li>
-            <li><a href="https://github.com/fable-elmish/hmr">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/elmish/hmr">Source Code on GitHub</a></li>
             <li class="nav-header">Modules</li>
-            <li><a href="https://fable-elmish.github.io/hmr/hmr.html">HMR</a></li>
+            <li><a href="https://elmish.github.io/hmr/hmr.html">HMR</a></li>
           </ul>
         </div>
       </div>
