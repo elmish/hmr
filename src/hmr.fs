@@ -30,11 +30,11 @@ module Program =
         let map (model, cmd) =
             model, cmd |> Cmd.map UserMsg
 
-        let update model msg =
-            let newModel, cmd =
+        let update msg model =
+            let newModel,cmd =
                 match msg with
                 | UserMsg msg ->
-                    let newModel, cmd = program.update model.UserModel msg
+                    let newModel, cmd = program.update msg model.UserModel
                     { model with UserModel = newModel }, cmd
                 | Reload ->
                     { model with HMRCount = model.HMRCount + 1 }, Cmd.none
@@ -61,12 +61,5 @@ module Program =
           update = update
           subscribe = subs
           onError = program.onError
-          setState = fun dispatch ->
-            let setState = program.setState (UserMsg >> dispatch)
-            fun model ->
-                setState model.UserModel
-          view = fun dispatch ->
-            let view = program.view (UserMsg >> dispatch)
-            fun model ->
-                view model.UserModel
-        }
+          setState = fun model dispatch -> program.setState model.UserModel (UserMsg >> dispatch)
+          view = fun model dispatch -> program.view model.UserModel (UserMsg >> dispatch) }
