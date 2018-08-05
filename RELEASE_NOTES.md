@@ -1,3 +1,7 @@
+### 2.0.0-beta-4
+
+* Re-releasing v1.x for Fable 2
+
 ### 1.0.1
 
 * Backporting build

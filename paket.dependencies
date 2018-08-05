@@ -1,8 +1,8 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Core  redirects:force, content:none
-nuget Fable.Core
-nuget Fable.Elmish
+nuget Fable.Core prerelease
+nuget Fable.Elmish prerelease
 
 group Build
 framework: net46
