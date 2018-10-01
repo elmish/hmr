@@ -3,14 +3,10 @@ namespace Elmish.HMR
 open Elmish
 open Fable.Core
 open Fable.Core.JsInterop
+open Fable.Import
 
 [<RequireQualifiedAccess>]
 module Program =
-
-    type IModule =
-        abstract hot: obj with get, set
-
-    let [<Global>] [<Emit("module")>] ``module`` : IModule = jsNative
 
     type HMRMsg<'msg> =
         | UserMsg of 'msg
@@ -24,8 +20,8 @@ module Program =
 
     let inline withHMR (program:Elmish.Program<'arg, 'model, 'msg, 'view>) =
 
-        if not (isNull ``module``.hot) then
-            ``module``.hot?accept() |> ignore
+        if not (isNull HMR.``module``.hot) then
+            HMR.``module``.hot.accept() |> ignore
 
         let map (model, cmd) =
             model, cmd |> Cmd.map UserMsg
