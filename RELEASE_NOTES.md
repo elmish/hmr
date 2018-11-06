@@ -1,3 +1,7 @@
+### 2.1.0-beta-1
+
+* Add shadow version of `Program.toNavigable`
+
 ### 2.0.0
 
 * Release 2.0.0
