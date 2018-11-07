@@ -4,6 +4,7 @@ nuget FSharp.Core  redirects:force, content:none
 nuget Fable.Core
 nuget Fable.Elmish
 nuget Fable.Import.HMR
+nuget Fable.Elmish.Browser
 
 group Build
 framework: net46
