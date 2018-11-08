@@ -142,4 +142,11 @@ You should not see this message
             Navigation.Program.Internal.subscribe dispatch
 
         Navigation.Program.Internal.toNavigableWith parser urlUpdate program onLocationChange
+    #else
+    let inline toNavigable
+        (parser : Navigation.Parser<'a>)
+        (urlUpdate : 'a->'model->('model * Cmd<'msg>))
+        (program : Program<'a,'model,'msg,'view>) =
+
+            Navigation.Program.toNavigable parser urlUpdate program
     #endif
