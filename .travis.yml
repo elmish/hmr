@@ -12,4 +12,4 @@ cache:
   yarn: true
 
 script:
-  - ./build.sh
+  - ./build.sh build
