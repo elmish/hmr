@@ -80,7 +80,7 @@ Target.create "Package" (fun _ ->
 Target.create "PublishNuget" (fun _ ->
     let args = sprintf "push Fable.Elmish.HMR.%s.nupkg -s nuget.org -k %s" (string release.SemVer) (Environment.environVar "nugetkey")
 
-    let result = DotNet.exec (dtntWorkDir "src/bin/Debug") "nuget" args
+    let result = DotNet.exec (dtntWorkDir "src/bin/Release") "nuget" args
     if not result.OK then failwithf "Build of tests project failed."
 
 )
