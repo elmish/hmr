@@ -33,6 +33,9 @@
       <div class="row">
         <div class="span9" id="main">
           
+<div style="background-color: #ffdd57; color: #3b3108; padding: 1.25em 1.5em;">
+    This page is an archive for v1.x and v2.x of Fable.Elmish.HMR package
+</div>
 <h1><a name="Hot-Module-Replacement" class="anchor" href="#Hot-Module-Replacement">Hot Module Replacement</a></h1>
 <p>Elmish applications can benefit from Hot Module Replacement (known as HMR).</p>
 <p>This allow us to modify the application while it's running, without a full reload. Your application will now maintain its state between two changes.</p>
@@ -77,28 +80,45 @@
 ]
 </code></pre></td></tr></table>
 <p>You can find a complete <code>webpack.config.js</code> <a href="https://github.com/elmish/templates/blob/master/src/react-demo/Content/webpack.config.js">here</a>.</p>
-<h3><a name="Usage" class="anchor" href="#Usage">Usage</a></h3>
-<p>The package will include the HMR support only if you are building your program with <code>DEBUG</code> set in your compilation conditions.</p>
-<p>You need to always include <code>open Elmish.HMR</code> after your others <code>open Elmish.XXX</code> statements. This is needed to shadow supported APIs.</p>
-<p>For example, if you use <code>Elmish.Program.run</code> it will be shadowed as <code>Elmish.HMR.Program.run</code>.</p>
+<h3><a name="Program-module-functions" class="anchor" href="#Program-module-functions">Program module functions</a></h3>
+<p>Augment your program instance with HMR support.</p>
+<p><em>IMPORTANT</em>: Make sure to add HMR support before <code>Program.withReact</code> or <code>Program.withReactNative</code> line.</p>
+<p>Usage:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
-<span class="l">7: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">Elmish</span>
-<span class="k">open</span> <span class="id">Elmish</span><span class="pn">.</span><span class="id">React</span>
-<span class="k">open</span> <span class="id">Elmish</span><span class="pn">.</span><span class="id">HMR</span> <span class="c">// See how this is the last open statement</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">Elmish</span><span class="pn">.</span><span class="id">HMR</span>
 
 <span class="id">Program</span><span class="pn">.</span><span class="id">mkProgram</span> <span class="id">init</span> <span class="id">update</span> <span class="id">view</span>
+<span class="o">|&gt;</span> <span class="id">Program</span><span class="pn">.</span><span class="id">withHMR</span> <span class="c">// Add the HMR support</span>
 <span class="o">|&gt;</span> <span class="id">Program</span><span class="pn">.</span><span class="id">withReact</span> <span class="s">&quot;elmish-app&quot;</span>
 <span class="o">|&gt;</span> <span class="id">Program</span><span class="pn">.</span><span class="id">run</span>
 </code></pre></td>
 </tr>
 </table>
+<p>and if you use React Native:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">Elmish</span><span class="pn">.</span><span class="id">HMR</span>
+
+<span class="id">Program</span><span class="pn">.</span><span class="id">mkProgram</span> <span class="id">init</span> <span class="id">update</span> <span class="id">view</span>
+<span class="o">|&gt;</span> <span class="id">Program</span><span class="pn">.</span><span class="id">withHMR</span> <span class="c">// Add the HMR support</span>
+<span class="o">|&gt;</span> <span class="id">Program</span><span class="pn">.</span><span class="id">withReactNative</span> <span class="s">&quot;elmish-app&quot;</span>
+<span class="o">|&gt;</span> <span class="id">Program</span><span class="pn">.</span><span class="id">run</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Conditional-compilation" class="anchor" href="#Conditional-compilation">Conditional compilation</a></h3>
+<p>If don't want to include the Hot Moduple Replacement in production builds surround it with <code>#if DEBUG</code>/<code>#endif</code> and define the symbol conditionally in your build system.</p>
 
 
         </div>
