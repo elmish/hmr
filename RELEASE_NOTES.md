@@ -1,3 +1,7 @@
+### 3.0.2
+
+* Fix HMR by including `Elmish_HMR_Count` variable in window namespace
+
 ### 3.0.1
 
 * Fix `Release` version of `lazyView`, `lazyView2`, `lazyView3` and `lazyViewWith`

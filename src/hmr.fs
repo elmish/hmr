@@ -24,6 +24,12 @@ module Program =
         let hot = HMR.``module``.hot
 
         if not (isNull hot) then
+            Browser.window?Elmish_HMR_Count <-
+                if isNull Browser.window?Elmish_HMR_Count then
+                    0
+                else
+                    Browser.window?Elmish_HMR_Count + 1
+
             hot.accept() |> ignore
 
             let data = hot?data

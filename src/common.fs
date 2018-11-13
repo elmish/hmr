@@ -23,18 +23,20 @@ module Common =
             inherit Component<LazyProps<'model>,LazyState>(props)
 
             let hmrCount =
-                if isNull Browser.window?HMR_Count then
+                if isNull Browser.window?Elmish_HMR_Count then
                     0
                 else
-                    unbox<int> Browser.window?HMR_Count
+                    unbox<int> Browser.window?Elmish_HMR_Count
 
             do base.setInitState({ HMRCount = hmrCount})
 
             override this.shouldComponentUpdate(nextProps, _nextState) =
-                if isNull Browser.window?HMR_Count then
+                let hot = HMR.``module``.hot
+
+                if isNull hot then
                     not <| this.props.equal this.props.model nextProps.model
                 else
-                    let currentHmrCount : int = Browser.window?HMR_Count
+                    let currentHmrCount : int = Browser.window?Elmish_HMR_Count
                     if currentHmrCount > this.state.HMRCount then
                         this.setState(fun _prevState _props ->
                             { HMRCount = currentHmrCount }
