@@ -68,7 +68,7 @@ module Common =
     let inline lazyViewWith (equal:'model->'model->bool)
                      (view:'model->ReactElement)
                      (state:'model) =
-        Elmish.React.Common.lazyViewWith
+        Elmish.React.Common.lazyViewWith equal view state
     #endif
 
     #if DEBUG
@@ -133,7 +133,7 @@ module Common =
     /// Avoid rendering the view unless the model has changed.
     /// view: function of model to render the view
     let inline lazyView (view:'model->ReactElement) =
-        Elmish.React.Common.lazyView
+        Elmish.React.Common.lazyView view
     #endif
 
     #if DEBUG
@@ -145,7 +145,7 @@ module Common =
     /// Avoid rendering the view unless the model has changed.
     /// view: function of two arguments to render the model using the dispatch
     let inline lazyView2 (view:'model->'msg Dispatch->ReactElement) =
-        Elmish.React.Common.lazyView2
+        Elmish.React.Common.lazyView2 view
     #endif
 
     #if DEBUG
@@ -157,5 +157,5 @@ module Common =
     /// Avoid rendering the view unless the model has changed.
     /// view: function of three arguments to render the model using the dispatch
     let inline lazyView3 (view:_->_->_->ReactElement) =
-        Elmish.React.Common.lazyView3
+        Elmish.React.Common.lazyView3 view
     #endif

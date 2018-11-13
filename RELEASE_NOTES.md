@@ -1,3 +1,7 @@
+### 3.0.1
+
+* Fix `Release` version of `lazyView`, `lazyView2`, `lazyView3` and `lazyViewWith`
+
 ### 3.0.0
 
 * Fix HMR support for Elmish apps and shadow more API
