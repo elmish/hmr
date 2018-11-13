@@ -1,3 +1,7 @@
+### 3.0.0
+
+* Fix HMR support for Elmish apps and shadow more API
+
 ### 2.1.0
 
 * Release stable

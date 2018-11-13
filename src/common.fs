@@ -2,9 +2,50 @@ namespace Elmish.HMR
 
 open Fable.Import.React
 open Elmish
+open Fable.Import
+open Fable.Core.JsInterop
+open Fable.Helpers.React
 
 [<AutoOpen>]
 module Common =
+
+    type LazyProps<'model> = {
+        model: 'model
+        render: unit -> ReactElement
+        equal: 'model -> 'model -> bool
+    }
+
+    type LazyState =
+        { HMRCount : int }
+
+    module Components =
+        type LazyView<'model>(props) =
+            inherit Component<LazyProps<'model>,LazyState>(props)
+
+            let hmrCount =
+                if isNull Browser.window?HMR_Count then
+                    0
+                else
+                    unbox<int> Browser.window?HMR_Count
+
+            do base.setInitState({ HMRCount = hmrCount})
+
+            override this.shouldComponentUpdate(nextProps, _nextState) =
+                if isNull Browser.window?HMR_Count then
+                    not <| this.props.equal this.props.model nextProps.model
+                else
+                    let currentHmrCount : int = Browser.window?HMR_Count
+                    if currentHmrCount > this.state.HMRCount then
+                        this.setState(fun _prevState _props ->
+                            { HMRCount = currentHmrCount }
+                        )
+                        // An HMR call has been triggered between two frames we force a rendering
+                        true
+                    else
+                        not <| this.props.equal this.props.model nextProps.model
+
+            override this.render () =
+                this.props.render ()
 
     #if DEBUG
     /// Avoid rendering the view unless the model has changed.
@@ -14,7 +55,11 @@ module Common =
     let lazyViewWith (equal:'model->'model->bool)
                      (view:'model->ReactElement)
                      (state:'model) =
-        view state
+        ofType<Components.LazyView<_>,_,_>
+            { render = fun () -> view state
+              equal = equal
+              model = state }
+            []
     #else
     /// Avoid rendering the view unless the model has changed.
     /// equal: function to compare the previous and the new states
@@ -36,7 +81,11 @@ module Common =
                       (view:'model->'msg Dispatch->ReactElement)
                       (state:'model)
                       (dispatch:'msg Dispatch) =
-        view state dispatch
+        ofType<Components.LazyView<_>,_,_>
+            { render = fun () -> view state dispatch
+              equal = equal
+              model = state }
+            []
     #else
     /// Avoid rendering the view unless the model has changed.
     /// equal: function to compare the previous and the new states
@@ -58,7 +107,11 @@ module Common =
     /// state2: new state to render
     /// dispatch: dispatch function
     let lazyView3With (equal:_->_->bool) (view:_->_->_->ReactElement) state1 state2 (dispatch:'msg Dispatch) =
-        view state1 state2 dispatch
+        ofType<Components.LazyView<_>,_,_>
+            { render = fun () -> view state1 state2 dispatch
+              equal = equal
+              model = (state1,state2) }
+            []
     #else
     /// Avoid rendering the view unless the model has changed.
     /// equal: function to compare the previous and the new model (a tuple of two states)
@@ -74,8 +127,8 @@ module Common =
     #if DEBUG
     /// Avoid rendering the view unless the model has changed.
     /// view: function of model to render the view
-    let lazyView (view:'model->ReactElement) =
-        view
+    let inline lazyView (view:'model->ReactElement) =
+        lazyViewWith (=) view
     #else
     /// Avoid rendering the view unless the model has changed.
     /// view: function of model to render the view
@@ -87,7 +140,7 @@ module Common =
     /// Avoid rendering the view unless the model has changed.
     /// view: function of two arguments to render the model using the dispatch
     let lazyView2 (view:'model->'msg Dispatch->ReactElement) =
-        view
+        lazyView2With (=) view
     #else
     /// Avoid rendering the view unless the model has changed.
     /// view: function of two arguments to render the model using the dispatch
@@ -99,7 +152,7 @@ module Common =
     /// Avoid rendering the view unless the model has changed.
     /// view: function of three arguments to render the model using the dispatch
     let lazyView3 (view:_->_->_->ReactElement) =
-        view
+        lazyView3With (=) view
     #else
     /// Avoid rendering the view unless the model has changed.
     /// view: function of three arguments to render the model using the dispatch

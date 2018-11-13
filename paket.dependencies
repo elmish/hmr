@@ -7,6 +7,7 @@ nuget Fable.Core
 nuget Fable.Elmish
 nuget Fable.Import.HMR
 nuget Fable.Elmish.Browser
+nuget Fable.Elmish.React 2.1.0
 
 group Formatting
     source https://nuget.org/api/v2

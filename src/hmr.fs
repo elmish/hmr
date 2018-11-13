@@ -129,6 +129,10 @@ You should not see this message
         Elmish.Program.run program
     #endif
 
+    (*
+        Shadow: Fable.Elmish.Navigation
+    *)
+
     #if DEBUG
     let toNavigable
         (parser : Navigation.Parser<'a>)
@@ -152,54 +156,38 @@ You should not see this message
             Navigation.Program.toNavigable parser urlUpdate program
     #endif
 
+    (*
+        Shadow: Fable.Elmish.React
+    *)
+
     #if DEBUG
     /// Setup rendering of root React component inside html element identified by placeholderId
-    let withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
-        let mutable lastRequest = None
-        let setState model dispatch =
-            match lastRequest with
-            | Some r -> window.cancelAnimationFrame r
-            | _ -> ()
-
-            lastRequest <- Some (window.requestAnimationFrame (fun _ ->
-                Fable.Import.ReactDom.render(
-                    lazyView2With (fun x y -> obj.ReferenceEquals(x,y)) program.view model dispatch,
-                    document.getElementById(placeholderId)
-                )))
-
-        { program with setState = setState }
-    #else
     let inline withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Common.withReact placeholderId program
+        Elmish.React.Program.Internal.withReactUsing lazyView2With placeholderId program
+    #else
+    /// Setup rendering of root React component inside html element identified by placeholderId
+    let inline withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
+        Elmish.React.Program.withReact placeholderId program
     #endif
 
     #if DEBUG
     /// `withReact` uses `requestAnimationFrame` to optimize rendering in scenarios with updates at a higher rate than 60FPS, but this makes the cursor jump to the end in `input` elements.
     /// This function works around the glitch if you don't need the optimization (see https://github.com/elmish/react/issues/12).
-    let withReactUnoptimized placeholderId (program:Elmish.Program<_,_,_,_>) =
-        let setState model dispatch =
-            Fable.Import.ReactDom.render(
-                lazyView2With (fun x y -> obj.ReferenceEquals(x,y)) program.view model dispatch,
-                document.getElementById(placeholderId)
-            )
-
-        { program with setState = setState }
-    #else
     let inline withReactUnoptimized placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Common.withReactUnoptimized placeholderId program
+        Elmish.React.Program.Internal.withReactUnoptimizedUsing lazyView2With placeholderId program
+    #else
+    /// `withReact` uses `requestAnimationFrame` to optimize rendering in scenarios with updates at a higher rate than 60FPS, but this makes the cursor jump to the end in `input` elements.
+    /// This function works around the glitch if you don't need the optimization (see https://github.com/elmish/react/issues/12).
+    let inline withReactUnoptimized placeholderId (program:Elmish.Program<_,_,_,_>) =
+        Elmish.React.Program.withReactUnoptimized placeholderId program
     #endif
 
     #if DEBUG
     /// Setup rendering of root React component inside html element identified by placeholderId using React.hydrate
-    let withReactHydrate placeholderId (program:Elmish.Program<_,_,_,_>) =
-        let setState model dispatch =
-            Fable.Import.ReactDom.hydrate(
-                lazyView2With (fun x y -> obj.ReferenceEquals(x,y)) program.view model dispatch,
-                document.getElementById(placeholderId)
-            )
-
-        { program with setState = setState }
-    #else
     let inline withReactHydrate placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Common.withReactHydrate placeholderId program
+        Elmish.React.Program.Internal.withReactHydrateUsing lazyView2With placeholderId program
+    #else
+    /// Setup rendering of root React component inside html element identified by placeholderId using React.hydrate
+    let inline withReactHydrate placeholderId (program:Elmish.Program<_,_,_,_>) =
+        Elmish.React.Program.withReactHydrate placeholderId program
     #endif
