@@ -8,12 +8,32 @@ nuget Fable.Elmish
 nuget Fable.Import.HMR
 nuget Fable.Elmish.Browser
 
-group Build
-framework: net46
-
+group Formatting
     source https://nuget.org/api/v2
-    nuget FSharp.Core  redirects:force, content:none
-    nuget FAKE
-    nuget FSharp.Formatting
+    source https://ci.appveyor.com/nuget/fsharp-formatting
+
+    nuget FSharp.Formatting prerelease
+    nuget FSharp.Formatting.CommandTool prerelease
+
+group FakeBuild
+    source https://api.nuget.org/v3/index.json
+
+    storage: none
+
+    clitool dotnet-fake
+    nuget NETStandard.Library.NETFramework
+    nuget Fake.DotNet.Cli
+    nuget Fake.DotNet.Paket
+    nuget Fake.Core.Target
+    nuget Fake.Core.Process
+    nuget Fake.Core.String
+    nuget Fake.Core.ReleaseNotes
+    nuget Fake.Core.UserInput
+    nuget Fake.IO.FileSystem
+    nuget Fake.Tools.Git
+    nuget Fake.JavaScript.Yarn
+    nuget Fake.DotNet.AssemblyInfoFile
+    nuget Fake.DotNet.FSFormatting
+    nuget Fake.Api.GitHub
 
     github fsharp/FAKE modules/Octokit/Octokit.fsx

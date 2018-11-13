@@ -7,7 +7,7 @@ install:
   - ps: Install-Product node 8 x64
 
 build_script:
-  - cmd: build.cmd
+  - cmd: build.cmd build
 
 cache:
 - "%LOCALAPPDATA%\\Yarn"
