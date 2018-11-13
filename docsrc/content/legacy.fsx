@@ -6,8 +6,13 @@
 open Elmish
 
 (**
+<div style="background-color: #ffdd57; color: #3b3108; padding: 1.25em 1.5em;">
+    This page is an archive for v1.x and v2.x of Fable.Elmish.HMR package
+</div>
+
 Hot Module Replacement
 ======================
+
 Elmish applications can benefit from Hot Module Replacement (known as HMR).
 
 This allow us to modify the application while it's running, without a full reload. Your application will now maintain its state between two changes.
@@ -51,20 +56,38 @@ plugins : isProduction ? [] : [
 
 You can find a complete `webpack.config.js` [here](https://github.com/elmish/templates/blob/master/src/react-demo/Content/webpack.config.js).
 
-### Usage
+### Program module functions
 
-The package will include the HMR support only if you are building your program with `DEBUG` set in your compilation conditions.
+Augment your program instance with HMR support.
 
-You need to always include `open Elmish.HMR` after your others `open Elmish.XXX` statements. This is needed to shadow supported APIs.
+*IMPORTANT*: Make sure to add HMR support before `Program.withReact` or `Program.withReactNative` line.
 
-For example, if you use `Elmish.Program.run` it will be shadowed as `Elmish.HMR.Program.run`.
-
+Usage:
 *)
 
-open Elmish
-open Elmish.React
-open Elmish.HMR // See how this is the last open statement
+
+open Elmish.HMR
 
 Program.mkProgram init update view
+|> Program.withHMR // Add the HMR support
 |> Program.withReact "elmish-app"
 |> Program.run
+
+(**
+
+and if you use React Native:
+*)
+
+
+open Elmish.HMR
+
+Program.mkProgram init update view
+|> Program.withHMR // Add the HMR support
+|> Program.withReactNative "elmish-app"
+|> Program.run
+
+(**
+### Conditional compilation
+If don't want to include the Hot Moduple Replacement in production builds surround it with `#if DEBUG`/`#endif` and define the symbol conditionally in your build system.
+
+*)

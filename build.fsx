@@ -80,7 +80,7 @@ Target.create "Package" (fun _ ->
 Target.create "PublishNuget" (fun _ ->
     let args = sprintf "push Fable.Elmish.HMR.%s.nupkg -s nuget.org -k %s" (string release.SemVer) (Environment.environVar "nugetkey")
 
-    let result = DotNet.exec (dtntWorkDir "src/bin/Debug") "nuget" args
+    let result = DotNet.exec (dtntWorkDir "src/bin/Release") "nuget" args
     if not result.OK then failwithf "Build of tests project failed."
 
 )
@@ -125,21 +125,6 @@ layoutRootsAll.Add("en", [ Doc.templates;
                            Doc.formatting @@ "templates/reference" ])
 
 let copyFiles () =
-    let header =
-        String.splitStr "\n" """(*** hide ***)
-#I "../../src/bin/Debug/netstandard1.6"
-#r "Fable.Core.dll"
-#r "Fable.Elmish.dll"
-
-(**
-*)"""
-
-    !!"src/*.fs"
-    |> Seq.map (fun fn -> File.read fn |> Seq.append header, fn)
-    |> Seq.iter (fun (lines,fn) ->
-        let fsx = Path.Combine(Doc.content,Path.ChangeExtension(fn |> Path.GetFileName, "fsx"))
-        lines |> File.write false fsx)
-
     Shell.copyRecursive Doc.files Doc.output true
     |> Trace.logItems "Copying file: "
     Directory.ensure (Doc.output @@ "content")
