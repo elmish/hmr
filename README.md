@@ -14,4 +14,4 @@ paket add nuget Fable.Elmish.HMR
 
 ## Demo
 
-![hmr demo](docs/files/img/hmr_demo.gif)
+![hmr demo](docsrc/files/img/hmr_demo.gif)
