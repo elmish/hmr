@@ -1,3 +1,7 @@
+### 4.0.0-beta-1
+
+* Elmish 3.0 compat
+
 ### 3.2.0
 
 * Fix ReactNative
