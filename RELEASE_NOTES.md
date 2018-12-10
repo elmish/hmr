@@ -1,3 +1,7 @@
+### 4.0.0-beta-1
+
+* Elmish 3.0 compat
+
 ### 3.0.2
 
 * Fix HMR by including `Elmish_HMR_Count` variable in window namespace
