@@ -1,13 +1,12 @@
 source https://nuget.org/api/v2
 
-nuget Fable.Elmish.React
-nuget Fable.React
 nuget FSharp.Core  redirects:force, content:none
 nuget Fable.Core
-nuget Fable.Elmish
+nuget Fable.React
 nuget Fable.Import.HMR
-nuget Fable.Elmish.Browser
-nuget Fable.Elmish.React 2.1.0
+nuget Fable.Elmish prerelease
+nuget Fable.Elmish.Browser prerelease
+nuget Fable.Elmish.React prerelease
 
 group Formatting
     source https://nuget.org/api/v2
