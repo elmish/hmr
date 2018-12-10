@@ -159,7 +159,8 @@ You should not see this message
           subscribe = subs
           onError = program.onError
           setState = setState
-          view = view }
+          view = view
+          syncDispatch = id }
 
         |> Elmish.Program.runWith arg
     #else
