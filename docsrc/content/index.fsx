@@ -36,18 +36,16 @@ devServer: {
 }
 ```
 
-You also need to add this two plugins when building in development mode:
-
-- `webpack.HotModuleReplacementPlugin`
-- `webpack.NamedModulesPlugin`
+You also need to add `webpack.HotModuleReplacementPlugin` when building in development mode:
 
 Example:
 ```js
 plugins : isProduction ? [] : [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin()
+    new webpack.HotModuleReplacementPlugin()
 ]
 ```
+
+Note: second plugin that's necessary, `new webpack.NamedModulesPlugin()` is added automatically by Webpack in development mode: https://webpack.js.org/concepts/mode/
 
 You can find a complete `webpack.config.js` [here](https://github.com/elmish/templates/blob/master/src/react-demo/Content/webpack.config.js).
 
