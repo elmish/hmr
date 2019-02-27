@@ -1,6 +1,6 @@
-### 3.0.3
+### 3.1.0
 
-* Add shadowing function for `runWith`
+* Add shadowing function for `runWith` by @theimowski
 
 ### 3.0.2
 
