@@ -18,8 +18,8 @@ module Program =
         | Active of 'model
 
     #if DEBUG
-    /// Start the dispatch loop with `unit` for the init() function.
-    let inline run (program: Program<unit, 'model, 'msg, 'view>) =
+    /// Start the dispatch loop with `'arg` for the init() function.
+    let inline runWith (arg: 'arg) (program: Program<'arg, 'model, 'msg, 'view>) =
         let mutable hmrState : obj = null
         let hot = HMR.``module``.hot
 
@@ -129,11 +129,15 @@ You should not see this message
           setState = setState
           view = view }
 
-        |> Elmish.Program.runWith ()
+        |> Elmish.Program.runWith arg
     #else
-    let inline run (program: Program<unit, 'model, 'msg, 'view>) =
-        Elmish.Program.run program
+    let inline runWith (arg: 'arg) (program: Program<'arg, 'model, 'msg, 'view>) =
+        Elmish.Program.runWith arg program
     #endif
+
+    /// Start the dispatch loop with `unit` for the init() function.
+    let inline run (program: Program<unit, 'model, 'msg, 'view>) =
+        runWith () program
 
     (*
         Shadow: Fable.Elmish.Navigation

@@ -1,3 +1,7 @@
+### 3.1.0
+
+* Add shadowing function for `runWith` by @theimowski
+
 ### 3.0.2
 
 * Fix HMR by including `Elmish_HMR_Count` variable in window namespace
