@@ -1,3 +1,7 @@
+### 3.2.0
+
+* Fix ReactNative
+
 ### 3.1.0
 
 * Add shadowing function for `runWith` by @theimowski

@@ -9,6 +9,38 @@ open Fable.Core.JsInterop
 [<RequireQualifiedAccess>]
 module Program =
 
+    module Internal =
+        type Plateform =
+            | Browser
+            | ReactNative
+
+        let plateform =
+            match Browser.window.navigator.product with
+            | "ReactNative" -> ReactNative
+            | _ -> Browser
+
+        let tryRestoreState (hot : HMR.IHot) =
+            match plateform with
+            | ReactNative ->
+                let hmrState = Browser.window?react_native_elmish_hmr_state
+                if not (isNull hmrState) then
+                    Some hmrState
+                else
+                    None
+            | Browser ->
+                let data = hot?data
+                if not (isNull data) && not (isNull data?hmrState) then
+                    Some data?hmrState
+                else
+                    None
+
+        let saveState (data : obj) (hmrState : obj) =
+            match plateform with
+            | ReactNative ->
+                Browser.window?react_native_elmish_hmr_state <- hmrState
+            | Browser ->
+                data?hmrState <- hmrState
+
     type Msg<'msg> =
         | UserMsg of 'msg
         | Stop
@@ -32,10 +64,10 @@ module Program =
 
             hot.accept() |> ignore
 
-            let data = hot?data
-            // Check if we have an old state to restore
-            if not (isNull data) && not (isNull data?hmrState) then
-                hmrState <- data?hmrState
+            match Internal.tryRestoreState hot with
+            | Some previousState ->
+                hmrState <- previousState
+            | None -> ()
 
         let map (model, cmd) =
             model, cmd |> Cmd.map UserMsg
@@ -81,8 +113,8 @@ module Program =
         let hmrSubscription =
             let handler dispatch =
                 if not (isNull hot) then
-                    hot.addDisposeHandler(fun data ->
-                        data?hmrState <- hmrState
+                    hot.dispose(fun data ->
+                        Internal.saveState data hmrState
 
                         dispatch Stop
                     )
