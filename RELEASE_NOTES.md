@@ -1,3 +1,8 @@
+### 4.0.0-beta-2
+
+* Includes: Fix ReactNative
+* Includes: Add shadowing function for `runWith` by @theimowski
+
 ### 4.0.0-beta-1
 
 * Elmish 3.0 compat
