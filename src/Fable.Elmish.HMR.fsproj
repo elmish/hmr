@@ -3,6 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="bindings.fs" />
     <Compile Include="common.fs" />
     <Compile Include="hmr.fs" />
   </ItemGroup>

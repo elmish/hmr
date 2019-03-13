@@ -64,7 +64,7 @@ open Elmish.React
 open Elmish.HMR // See how this is the last open statement
 
 Program.mkProgram init update view
-|> Program.withReact "elmish-app"
+|> Program.withReactSynchronous "elmish-app"
 |> Program.run
 
 (**
@@ -74,5 +74,5 @@ You can also use `Elmish.Program.runWith` if you need to pass custom arguments, 
 *)
 
 Program.mkProgram init update view
-|> Program.withReact "elmish-app"
+|> Program.withReactSynchronous "elmish-app"
 |> Program.runWith ("custom argument", 42)
