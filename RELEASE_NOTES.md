@@ -1,3 +1,7 @@
+### 4.0.0-beta-3
+
+* Update to `Fable.Core` v3-beta
+
 ### 4.0.0-beta-2
 
 * Includes: Fix ReactNative
