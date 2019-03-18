@@ -1,28 +1,27 @@
 namespace Elmish.HMR
 
+open Fable.Core.JsInterop
+open Browser
 open Elmish
 open Elmish.Browser
-open Fable.Import
-open Fable.Import.Browser
-open Fable.Core.JsInterop
 
 [<RequireQualifiedAccess>]
 module Program =
 
-    module Internal =
-        type Plateform =
+    module private Internal =
+        type Platform =
             | Browser
             | ReactNative
 
-        let plateform =
-            match Browser.window.navigator.product with
+        let platform =
+            match window?navigator?product with
             | "ReactNative" -> ReactNative
             | _ -> Browser
 
         let tryRestoreState (hot : HMR.IHot) =
-            match plateform with
+            match platform with
             | ReactNative ->
-                let hmrState = Browser.window?react_native_elmish_hmr_state
+                let hmrState = window?react_native_elmish_hmr_state
                 if not (isNull hmrState) then
                     Some hmrState
                 else
@@ -35,9 +34,9 @@ module Program =
                     None
 
         let saveState (data : obj) (hmrState : obj) =
-            match plateform with
+            match platform with
             | ReactNative ->
-                Browser.window?react_native_elmish_hmr_state <- hmrState
+                window?react_native_elmish_hmr_state <- hmrState
             | Browser ->
                 data?hmrState <- hmrState
 
@@ -51,16 +50,16 @@ module Program =
 
     #if DEBUG
     /// Start the dispatch loop with `'arg` for the init() function.
-    let inline runWith (arg: 'arg) (program: Program<'arg, 'model, 'msg, 'view>) =
+    let runWith (arg: 'arg) (program: Program<'arg, 'model, 'msg, 'view>) =
         let mutable hmrState : obj = null
         let hot = HMR.``module``.hot
 
         if not (isNull hot) then
-            Browser.window?Elmish_HMR_Count <-
-                if isNull Browser.window?Elmish_HMR_Count then
+            window?Elmish_HMR_Count <-
+                if isNull window?Elmish_HMR_Count then
                     0
                 else
-                    Browser.window?Elmish_HMR_Count + 1
+                    window?Elmish_HMR_Count + 1
 
             hot.accept() |> ignore
 
@@ -163,20 +162,15 @@ You should not see this message
           syncDispatch = id }
 
         |> Elmish.Program.runWith arg
-    #else
-    let inline runWith (arg: 'arg) (program: Program<'arg, 'model, 'msg, 'view>) =
-        Elmish.Program.runWith arg program
-    #endif
 
     /// Start the dispatch loop with `unit` for the init() function.
-    let inline run (program: Program<unit, 'model, 'msg, 'view>) =
+    let run (program: Program<unit, 'model, 'msg, 'view>) =
         runWith () program
 
     (*
         Shadow: Fable.Elmish.Navigation
     *)
 
-    #if DEBUG
     let toNavigable
         (parser : Navigation.Parser<'a>)
         (urlUpdate : 'a->'model->('model * Cmd<'msg>))
@@ -190,47 +184,25 @@ You should not see this message
             Navigation.Program.Internal.subscribe dispatch
 
         Navigation.Program.Internal.toNavigableWith parser urlUpdate program onLocationChange
-    #else
-    let inline toNavigable
-        (parser : Navigation.Parser<'a>)
-        (urlUpdate : 'a->'model->('model * Cmd<'msg>))
-        (program : Program<'a,'model,'msg,'view>) =
-
-            Navigation.Program.toNavigable parser urlUpdate program
-    #endif
 
     (*
         Shadow: Fable.Elmish.React
     *)
 
-    #if DEBUG
-    /// Setup rendering of root React component inside html element identified by placeholderId
-    let inline withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.Internal.withReactUsing lazyView2With placeholderId program
-    #else
-    /// Setup rendering of root React component inside html element identified by placeholderId
-    let inline withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.withReact placeholderId program
-    #endif
+    let withReactBatched placeholderId (program:Elmish.Program<_,_,_,_>) =
+        Elmish.React.Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
 
-    #if DEBUG
-    /// `withReact` uses `requestAnimationFrame` to optimize rendering in scenarios with updates at a higher rate than 60FPS, but this makes the cursor jump to the end in `input` elements.
-    /// This function works around the glitch if you don't need the optimization (see https://github.com/elmish/react/issues/12).
-    let inline withReactUnoptimized placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.Internal.withReactUnoptimizedUsing lazyView2With placeholderId program
-    #else
-    /// `withReact` uses `requestAnimationFrame` to optimize rendering in scenarios with updates at a higher rate than 60FPS, but this makes the cursor jump to the end in `input` elements.
-    /// This function works around the glitch if you don't need the optimization (see https://github.com/elmish/react/issues/12).
-    let inline withReactUnoptimized placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.withReactUnoptimized placeholderId program
-    #endif
+    let withReactSynchronous placeholderId (program:Elmish.Program<_,_,_,_>) =
+        Elmish.React.Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
 
-    #if DEBUG
-    /// Setup rendering of root React component inside html element identified by placeholderId using React.hydrate
-    let inline withReactHydrate placeholderId (program:Elmish.Program<_,_,_,_>) =
+    let withReactHydrate placeholderId (program:Elmish.Program<_,_,_,_>) =
         Elmish.React.Program.Internal.withReactHydrateUsing lazyView2With placeholderId program
-    #else
-    /// Setup rendering of root React component inside html element identified by placeholderId using React.hydrate
-    let inline withReactHydrate placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.withReactHydrate placeholderId program
+
+    [<System.Obsolete("Use withReactBatched")>]
+    let withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
+        Elmish.React.Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
+
+    [<System.Obsolete("Use withReactSynchronous")>]
+    let withReactUnoptimized placeholderId (program:Elmish.Program<_,_,_,_>) =
+        Elmish.React.Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
     #endif

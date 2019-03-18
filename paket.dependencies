@@ -1,10 +1,6 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Core  redirects:force, content:none
-nuget Fable.Core
-nuget Fable.React
-nuget Fable.Import.HMR
-nuget Fable.Elmish prerelease
 nuget Fable.Elmish.Browser prerelease
 nuget Fable.Elmish.React prerelease
 

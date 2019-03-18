@@ -1,10 +1,9 @@
 namespace Elmish.HMR
 
-open Fable.Import.React
-open Elmish
-open Fable.Import
 open Fable.Core.JsInterop
-open Fable.Helpers.React
+open Fable.React
+open Browser
+open Elmish
 
 [<AutoOpen>]
 module Common =
@@ -23,10 +22,10 @@ module Common =
             inherit Component<LazyProps<'model>,LazyState>(props)
 
             let hmrCount =
-                if isNull Browser.window?Elmish_HMR_Count then
+                if isNull window?Elmish_HMR_Count then
                     0
                 else
-                    unbox<int> Browser.window?Elmish_HMR_Count
+                    unbox<int> window?Elmish_HMR_Count
 
             do base.setInitState({ HMRCount = hmrCount})
 
@@ -36,7 +35,7 @@ module Common =
                 if isNull hot then
                     not <| this.props.equal this.props.model nextProps.model
                 else
-                    let currentHmrCount : int = Browser.window?Elmish_HMR_Count
+                    let currentHmrCount : int = window?Elmish_HMR_Count
                     if currentHmrCount > this.state.HMRCount then
                         this.setState(fun _prevState _props ->
                             { HMRCount = currentHmrCount }
