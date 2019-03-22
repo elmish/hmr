@@ -196,4 +196,4 @@ type IHot =
 type IModule =
     abstract hot: IHot with get, set
 
-let [<Global>] [<Emit("module")>] ``module`` : IModule = jsNative
+let [<Global("module")>] ``module`` : IModule = jsNative
