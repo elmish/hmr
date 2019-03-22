@@ -1,3 +1,7 @@
+### 4.0.0-beta-5
+
+* Inline functions (by @alfonsogarciacaro)
+
 ### 4.0.0-beta-4
 
 * Update to Elmish 3.0.0-beta-7 (by @alfonsogarciacaro)
