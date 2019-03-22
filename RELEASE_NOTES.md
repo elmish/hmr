@@ -1,3 +1,7 @@
+### 4.0.0-beta-4
+
+* Update to Elmish 3.0.0-beta-7 (by @alfonsogarciacaro)
+
 ### 4.0.0-beta-3
 
 * Update to `Fable.Core` v3-beta
