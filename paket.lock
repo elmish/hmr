@@ -18,17 +18,17 @@ NUGET
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
     Fable.Core (3.0.0-beta-005) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Elmish (3.0.0-beta-5) - restriction: >= netstandard2.0
+    Fable.Elmish (3.0.0-beta-7)
       Fable.Core (>= 3.0.0-beta-004) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
-    Fable.Elmish.Browser (3.0.0-beta-2)
-      Fable.Browser.Dom (>= 1.0.0-alpha-003) - restriction: >= netstandard2.0
-      Fable.Core (>= 3.0.0-beta-004) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 3.0.0-beta-4) - restriction: >= netstandard2.0
+    Fable.Elmish.Browser (3.0.0-beta-3)
+      Fable.Browser.Dom (>= 1.0.0-alpha-004) - restriction: >= netstandard2.0
+      Fable.Core (>= 3.0.0-beta-005) - restriction: >= netstandard2.0
+      Fable.Elmish (>= 3.0.0-beta-7) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
-    Fable.Elmish.React (3.0.0-beta-2)
-      Fable.Core (>= 3.0.0-beta-004) - restriction: >= netstandard2.0
-      Fable.Elmish (>= 3.0.0-beta-4) - restriction: >= netstandard2.0
+    Fable.Elmish.React (3.0.0-beta-4)
+      Fable.Core (>= 3.0.0-beta-005) - restriction: >= netstandard2.0
+      Fable.Elmish (>= 3.0.0-beta-7) - restriction: >= netstandard2.0
       Fable.React (>= 5.0.0-alpha-005) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
     Fable.React (5.0.0-alpha-005) - restriction: >= netstandard2.0
