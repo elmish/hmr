@@ -71,14 +71,14 @@ module Program =
         let map (model, cmd) =
             model, cmd |> Cmd.map UserMsg
 
-        let update (msg : Msg<'msg>) (model : Model<'model>) =
+        let mapUpdate update (msg : Msg<'msg>) (model : Model<'model>) =
             let newModel,cmd =
                 match msg with
                     | UserMsg msg ->
                         match model with
                         | Inactive -> model, Cmd.none
                         | Active userModel ->
-                            let newModel, cmd = program.update msg userModel
+                            let newModel, cmd = update msg userModel
                             Active newModel, cmd
 
                     | Stop ->
@@ -88,26 +88,20 @@ module Program =
             hmrState <- newModel
             newModel,cmd
 
-        let setState (model : Model<'model>) dispatch =
-            match model with
-            | Inactive -> ()
-            | Active userModel ->
-                program.setState userModel (UserMsg >> dispatch)
-
         let createModel (model, cmd) =
             Active model, cmd
 
-        let init =
+        let mapInit init =
             if isNull hmrState then
-                program.init >> map >> createModel
+                init >> map >> createModel
             else
                 (fun _ -> unbox<Model<_>> hmrState, Cmd.none)
 
-        let setState (model : Model<'model>) dispatch =
+        let mapSetState setState (model : Model<'model>) dispatch =
             match model with
             | Inactive -> ()
             | Active userModel ->
-                program.setState userModel (UserMsg >> dispatch)
+                setState userModel (UserMsg >> dispatch)
 
         let hmrSubscription =
             let handler dispatch =
@@ -119,14 +113,14 @@ module Program =
                     )
             [ handler ]
 
-        let subs model =
+        let mapSubscribe subscribe model =
             match model with
             | Inactive -> Cmd.none
             | Active userModel ->
-                Cmd.batch [ program.subscribe userModel |> Cmd.map UserMsg
+                Cmd.batch [ subscribe userModel |> Cmd.map UserMsg
                             hmrSubscription ]
 
-        let view =
+        let mapView view =
             // This function will never be executed because we are using a local reference to access `program.view`.
             // For example,
             // ```fs
@@ -151,16 +145,10 @@ You should not see this message
                     """
                     |> failwith
                 | Active userModel ->
-                    program.view userModel (UserMsg >> dispatch)
+                    view userModel (UserMsg >> dispatch)
 
-        { init = init
-          update = update
-          subscribe = subs
-          onError = program.onError
-          setState = setState
-          view = view
-          syncDispatch = id }
-
+        program
+        |> Program.map mapInit mapUpdate mapView mapSetState mapSubscribe
         |> Elmish.Program.runWith arg
 
     /// Start the dispatch loop with `unit` for the init() function.
