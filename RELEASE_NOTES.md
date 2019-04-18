@@ -1,3 +1,8 @@
+### 4.0.0-beta-6
+
+* Upgrade Fable.Elmish.Browser (by @alfonsogarciacaro)
+* Re-add the non debuggin Helpers so people can just `open Elmish.HMR` (by @alfonsogarciacaro)
+
 ### 4.0.0-beta-5
 
 * Inline functions (by @alfonsogarciacaro)
