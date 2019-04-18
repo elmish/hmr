@@ -3,7 +3,7 @@ namespace Elmish.HMR
 open Fable.Core.JsInterop
 open Browser
 open Elmish
-open Elmish.Browser
+open Elmish.React
 
 [<RequireQualifiedAccess>]
 module Program =
@@ -48,9 +48,11 @@ module Program =
         | Inactive
         | Active of 'model
 
-    #if DEBUG
     /// Start the dispatch loop with `'arg` for the init() function.
     let inline runWith (arg: 'arg) (program: Program<'arg, 'model, 'msg, 'view>) =
+#if !DEBUG
+        Program.runWith arg program
+#else
         let mutable hmrState : obj = null
         let hot = HMR.``module``.hot
 
@@ -124,7 +126,7 @@ module Program =
             // This function will never be executed because we are using a local reference to access `program.view`.
             // For example,
             // ```fs
-            // let withReactUnoptimized placeholderId (program:Elmish.Program<_,_,_,_>) =
+            // let withReactUnoptimized placeholderId (program: Program<_,_,_,_>) =
             //     let setState model dispatch =
             //         Fable.Import.ReactDom.render(
             //             lazyView2With (fun x y -> obj.ReferenceEquals(x,y)) program.view model dispatch,
@@ -149,11 +151,16 @@ You should not see this message
 
         program
         |> Program.map mapInit mapUpdate mapView mapSetState mapSubscribe
-        |> Elmish.Program.runWith arg
+        |> Program.runWith arg
+#endif
 
     /// Start the dispatch loop with `unit` for the init() function.
     let inline run (program: Program<unit, 'model, 'msg, 'view>) =
+#if !DEBUG
+        Program.run program
+#else
         runWith () program
+#endif
 
     (*
         Shadow: Fable.Elmish.Navigation
@@ -163,7 +170,9 @@ You should not see this message
         (parser : Navigation.Parser<'a>)
         (urlUpdate : 'a->'model->('model * Cmd<'msg>))
         (program : Program<'a,'model,'msg,'view>) =
-
+#if !DEBUG
+        Navigation.Program.toNavigable parser urlUpdate program
+#else
         let onLocationChange (dispatch : Dispatch<_ Navigation.Navigable>) =
             if not (isNull HMR.``module``.hot) then
                 if HMR.``module``.hot.status() <> HMR.Idle then
@@ -172,25 +181,45 @@ You should not see this message
             Navigation.Program.Internal.subscribe dispatch
 
         Navigation.Program.Internal.toNavigableWith parser urlUpdate program onLocationChange
+#endif
 
     (*
         Shadow: Fable.Elmish.React
     *)
 
-    let inline withReactBatched placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
+    let inline withReactBatched placeholderId (program: Program<_,_,_,_>) =
+#if !DEBUG
+        Program.withReactBatched placeholderId program
+#else
+        Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
+#endif
 
-    let inline withReactSynchronous placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
+    let inline withReactSynchronous placeholderId (program: Program<_,_,_,_>) =
+#if !DEBUG
+        Program.withReactSynchronous placeholderId program
+#else
+        Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
+#endif
 
-    let inline withReactHydrate placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.Internal.withReactHydrateUsing lazyView2With placeholderId program
+    let inline withReactHydrate placeholderId (program: Program<_,_,_,_>) =
+#if !DEBUG
+        Program.withReactHydrate placeholderId program
+#else
+        Program.Internal.withReactHydrateUsing lazyView2With placeholderId program
+#endif
 
     [<System.Obsolete("Use withReactBatched")>]
-    let inline withReact placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
+    let inline withReact placeholderId (program: Program<_,_,_,_>) =
+#if !DEBUG
+        Program.withReactBatched placeholderId program
+#else
+        Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
+#endif
 
     [<System.Obsolete("Use withReactSynchronous")>]
-    let inline withReactUnoptimized placeholderId (program:Elmish.Program<_,_,_,_>) =
-        Elmish.React.Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
-    #endif
+    let inline withReactUnoptimized placeholderId (program: Program<_,_,_,_>) =
+#if !DEBUG
+        Program.withReactSynchronous placeholderId program
+#else
+        Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
+#endif
