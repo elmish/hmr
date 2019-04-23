@@ -1,9 +1,9 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Core  redirects:force, content:none
-nuget Fable.Elmish prerelease
-nuget Fable.Elmish.Browser prerelease
-nuget Fable.Elmish.React prerelease
+nuget Fable.Elmish
+nuget Fable.Elmish.Browser
+nuget Fable.Elmish.React
 
 group Formatting
     source https://nuget.org/api/v2

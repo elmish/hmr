@@ -1,3 +1,7 @@
+### 4.0.0
+
+* Release stable version
+
 ### 4.0.0-beta-6
 
 * Upgrade Fable.Elmish.Browser (by @alfonsogarciacaro)
