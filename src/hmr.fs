@@ -3,7 +3,6 @@ namespace Elmish.HMR
 open Fable.Core.JsInterop
 open Browser
 open Elmish
-open Elmish.React
 
 [<RequireQualifiedAccess>]
 module Program =
@@ -189,37 +188,37 @@ You should not see this message
 
     let inline withReactBatched placeholderId (program: Program<_,_,_,_>) =
 #if !DEBUG
-        Program.withReactBatched placeholderId program
+        Elmish.React.Program.withReactBatched placeholderId program
 #else
-        Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
+        Elmish.React.Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
 #endif
 
     let inline withReactSynchronous placeholderId (program: Program<_,_,_,_>) =
 #if !DEBUG
-        Program.withReactSynchronous placeholderId program
+        Elmish.React.Program.withReactSynchronous placeholderId program
 #else
-        Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
+        Elmish.React.Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
 #endif
 
     let inline withReactHydrate placeholderId (program: Program<_,_,_,_>) =
 #if !DEBUG
-        Program.withReactHydrate placeholderId program
+        Elmish.React.Program.withReactHydrate placeholderId program
 #else
-        Program.Internal.withReactHydrateUsing lazyView2With placeholderId program
+        Elmish.React.Program.Internal.withReactHydrateUsing lazyView2With placeholderId program
 #endif
 
     [<System.Obsolete("Use withReactBatched")>]
     let inline withReact placeholderId (program: Program<_,_,_,_>) =
 #if !DEBUG
-        Program.withReactBatched placeholderId program
+        Elmish.React.Program.withReactBatched placeholderId program
 #else
-        Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
+        Elmish.React.Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
 #endif
 
     [<System.Obsolete("Use withReactSynchronous")>]
     let inline withReactUnoptimized placeholderId (program: Program<_,_,_,_>) =
 #if !DEBUG
-        Program.withReactSynchronous placeholderId program
+        Elmish.React.Program.withReactSynchronous placeholderId program
 #else
-        Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
+        Elmish.React.Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
 #endif

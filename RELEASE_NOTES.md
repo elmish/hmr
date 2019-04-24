@@ -1,3 +1,7 @@
+### 4.0.1
+
+* Fix #25: Fix React shadowing calls to use the `LazyView` from `HMR`
+
 ### 4.0.0
 
 * Release stable version
