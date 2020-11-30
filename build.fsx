@@ -228,6 +228,7 @@ Target.create "Publish" ignore
   ==> "Install"
   ==> "Build"
   ==> "Package"
+  ==> "PublishNuget"
 
 "Build"
     ==> "CleanDocs"

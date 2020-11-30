@@ -1,3 +1,7 @@
+### 4.1.0
+
+* Upgrade dependency Fable.Elmish.Browser to 3.0.4 (see https://github.com/elmish/hmr/issues/27)
+
 ### 4.0.1
 
 * Fix #25: Fix React shadowing calls to use the `LazyView` from `HMR`
