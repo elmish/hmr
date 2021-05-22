@@ -174,8 +174,10 @@ You should not see this message
 #else
         let onLocationChange (dispatch : Dispatch<_ Navigation.Navigable>) =
             if not (isNull HMR.``module``.hot) then
-                if HMR.``module``.hot.status() <> HMR.Idle then
-                    Navigation.Program.Internal.unsubscribe ()
+                // parcel doesn't implement webpack's status() function on its hot modules
+                if not (isNull HMR.``module``.hot?status) then
+                    if HMR.``module``.hot.status() <> HMR.Idle then
+                        Navigation.Program.Internal.unsubscribe ()
 
             Navigation.Program.Internal.subscribe dispatch
 
