@@ -1,0 +1,27 @@
+{
+  "name": "hmr",
+  "private": true,
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "tests:watch": "cd tests && dotnet fable --watch --outDir fableBuild --run webpack serve --mode development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elmish/hmr.git"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.5.0",
+    "nacara": "^1.1.0",
+    "nacara-layout-standard": "^1.1.0",
+    "webpack": "^5.62.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.4.0"
+  },
+  "dependencies": {
+    "bulma": "^0.9.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

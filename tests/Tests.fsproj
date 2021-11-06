@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="App.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\Fable.Elmish.HMR.fsproj" />
+  </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>

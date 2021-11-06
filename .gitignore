@@ -30,3 +30,7 @@ paket-files
 docs
 
 .ionide/
+
+.nacara/
+doc_deploy/
+fableBuild/

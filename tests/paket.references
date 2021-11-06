@@ -1,0 +1,8 @@
+group Tests
+    Fable.Core
+    Fable.Elmish
+    Fable.Elmish.Browser
+    Fable.Elmish.React
+    Fable.Promise
+    Feliz
+    Feliz.Bulma
