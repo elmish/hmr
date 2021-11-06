@@ -30,11 +30,7 @@ module Common =
             do base.setInitState({ HMRCount = hmrCount})
 
             override this.shouldComponentUpdate(nextProps, _nextState) =
-                let hot = HMR.``module``.hot
-
-                if isNull hot then
-                    not <| this.props.equal this.props.model nextProps.model
-                else
+                if HMR.active then
                     let currentHmrCount : int = window?Elmish_HMR_Count
                     if currentHmrCount > this.state.HMRCount then
                         this.setState(fun _prevState _props ->
@@ -44,6 +40,8 @@ module Common =
                         true
                     else
                         not <| this.props.equal this.props.model nextProps.model
+                else
+                    not <| this.props.equal this.props.model nextProps.model
 
             override this.render () =
                 this.props.render ()

@@ -3,20 +3,59 @@ module App
 open Elmish
 open Feliz
 open Feliz.Bulma
+open Fable.Core
+
+[<RequireQualifiedAccess>]
+type Page =
+    | Home
+    | About
 
 type Model =
     {
+        CurrentRoute : Router.Route option
+        ActivePage : Page
         Value : int
     }
 
 type Msg =
     | Tick of unit
 
-let private init () =
+let private setRoute (result: Option<Router.Route>) (model : Model) =
+    let model = { model with CurrentRoute = result }
+
+    match result with
+    | None ->
+        let requestedUrl = Browser.Dom.window.location.href
+
+        JS.console.error("Error parsing url: " + requestedUrl)
+
+        { model with
+            ActivePage = Page.Home
+        }
+        , Cmd.none
+
+    | Some route ->
+        match route with
+        | Router.Home ->
+            { model with
+                ActivePage = Page.Home
+            }
+            , Cmd.none
+
+        | Router.About ->
+            { model with
+                ActivePage = Page.About
+            }
+            , Cmd.none
+
+
+let private init (optRoute : Router.Route option) =
     {
+        CurrentRoute = None
+        ActivePage = Page.Home
         Value = 0
     }
-    , Cmd.none
+    |> setRoute optRoute
 
 let private tick () =
     promise {
@@ -28,34 +67,59 @@ let private tick () =
 let private update (msg : Msg) (model : Model) =
     match msg with
     | Tick _ ->
-        {
+        { model with
             Value = model.Value + 1
         }
         , Cmd.OfPromise.perform tick () Tick
 
-let private view (model : Model) (dispatch : Dispatch<Msg>) =
-    Bulma.container [
-        Bulma.hero [
-            hero.isFullHeight
+let private liveCounter model =
+    Bulma.hero [
+        hero.isLarge
 
-            prop.children [
-                Bulma.heroBody [
-                    Bulma.text.div [
-                        text.hasTextCentered
-                        prop.style [
-                            style.width (length.percent 100)
+        prop.children [
+            Bulma.heroBody [
+                Bulma.text.div [
+                    text.hasTextCentered
+                    prop.style [
+                        style.width (length.percent 100)
+                    ]
+
+                    prop.children [
+                        Html.div [
+                            Html.text "Application is running since "
+                            Html.text (string model.Value)
+                            Html.text " seconds"
                         ]
 
+                        Html.br [ ]
+
+                        Html.text "Change me and check that the timer has not been reset"
+                    ]
+                ]
+            ]
+        ]
+    ]
+
+let private navbar (model : Model) =
+    Bulma.navbar [
+        color.isInfo
+
+        prop.children [
+            Bulma.navbarMenu [
+                prop.children [
+                    Bulma.navbarStart.div [
                         prop.children [
-                            Html.div [
-                                Html.text "Application is running since "
-                                Html.text (string model.Value)
-                                Html.text " seconds"
+                            Bulma.navbarItem.a [
+                                Router.href Router.Home
+
+                                prop.text "Home"
                             ]
 
-                            Html.br [ ]
+                            Bulma.navbarItem.a [
+                                Router.href Router.About
 
-                            Html.text "Change me and check that the timer has not been reset"
+                                prop.text "About"
+                            ]
                         ]
                     ]
                 ]
@@ -63,6 +127,43 @@ let private view (model : Model) (dispatch : Dispatch<Msg>) =
         ]
     ]
 
+let private renderActivePage (page : Page) =
+    let content =
+        match page with
+        | Page.Home ->
+            Bulma.text.p [
+                text.hasTextCentered
+
+                prop.children [
+                    Html.text "This is the home page"
+                ]
+            ]
+
+        | Page.About ->
+            Bulma.text.p [
+                text.hasTextCentered
+
+                prop.children [
+                    Html.text "This is the about page"
+                ]
+            ]
+
+    Bulma.section [
+        content
+    ]
+
+let private view (model : Model) (dispatch : Dispatch<Msg>) =
+    Html.div [
+        navbar model
+
+        renderActivePage model.ActivePage
+
+        Bulma.container [
+            liveCounter model
+        ]
+    ]
+
+open Elmish.UrlParser
 open Elmish.HMR
 
 // Use a subscription to trigger the Tick system
@@ -79,5 +180,6 @@ let tickSubscription _ =
 
 Program.mkProgram init update view
 |> Program.withSubscription tickSubscription
+|> Program.toNavigable (parseHash Router.pageParser) setRoute
 |> Program.withReactBatched "root"
 |> Program.run

@@ -34,3 +34,6 @@ docs
 .nacara/
 doc_deploy/
 fableBuild/
+tests/parcel/dist/
+.parcel-cache/
+dist/

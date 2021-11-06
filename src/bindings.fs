@@ -196,4 +196,18 @@ type IHot =
 type IModule =
     abstract hot: IHot with get, set
 
-let [<Global("module")>] ``module`` : IModule = jsNative
+[<Emit("import.meta.hot ? import.meta.hot : (import.meta.webpackHot ? import.meta.webpackHot : module.hot)")>]
+let hot : IHot = jsNative
+
+// [<Emit("module.hot")>]
+// let private hotViaModule : IHot = jsNative
+
+// let inline hot () : IHot =
+//     if not (isNull hotViaMeta) then
+//         hotViaMeta
+//     else
+//         hotViaModule
+
+
+[<Emit("import.meta.hot ? import.meta.hot : (import.meta.webpackHot ? import.meta.webpackHot : module.hot)")>]
+let active : bool = jsNative

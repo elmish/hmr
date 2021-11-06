@@ -7,6 +7,10 @@ open Elmish
 [<RequireQualifiedAccess>]
 module Program =
 
+
+    open Fable.Core
+    open Fable.Core.JsInterop
+
     module Internal =
         type Platform =
             | Browser
@@ -53,18 +57,17 @@ module Program =
         Program.runWith arg program
 #else
         let mutable hmrState : obj = null
-        let hot = HMR.``module``.hot
 
-        if not (isNull hot) then
+        if HMR.active then
             window?Elmish_HMR_Count <-
                 if isNull window?Elmish_HMR_Count then
                     0
                 else
                     window?Elmish_HMR_Count + 1
 
-            hot.accept() |> ignore
+            HMR.hot.accept() |> ignore
 
-            match Internal.tryRestoreState hot with
+            match Internal.tryRestoreState HMR.hot with
             | Some previousState ->
                 hmrState <- previousState
             | None -> ()
@@ -106,8 +109,8 @@ module Program =
 
         let hmrSubscription =
             let handler dispatch =
-                if not (isNull hot) then
-                    hot.dispose(fun data ->
+                if HMR.active then
+                    HMR.hot.dispose(fun data ->
                         Internal.saveState data hmrState
 
                         dispatch Stop
@@ -173,9 +176,10 @@ You should not see this message
         Navigation.Program.toNavigable parser urlUpdate program
 #else
         let onLocationChange (dispatch : Dispatch<_ Navigation.Navigable>) =
-            if not (isNull HMR.``module``.hot) then
-                if HMR.``module``.hot.status() <> HMR.Idle then
-                    Navigation.Program.Internal.unsubscribe ()
+            // if not (isNull hot) then
+            //     hot.dispose(fun data ->
+            //         Navigation.Program.Internal.unsubscribe ()
+            //     )
 
             Navigation.Program.Internal.subscribe dispatch
 

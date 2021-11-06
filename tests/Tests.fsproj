@@ -3,6 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Router.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,7 @@ module.exports = (_env, options) => {
         // trigger hot reloads. In production, put them in a separate CSS file.
         entry:
         {
-            app: "./fableBuild/App.js"
+            app: "./../fableBuild/App.js"
         },
         // Add a hash to the output file name in production
         // to prevent browser caching if code changes
@@ -23,6 +23,9 @@ module.exports = (_env, options) => {
             filename: "app.js"
         },
         devtool: isDevelopment ? 'eval-source-map' : false,
+        watchOptions: {
+            ignored: /node_modules/,
+        },
         plugins:
             [
                 // In production, we only need the bundle file
@@ -33,7 +36,6 @@ module.exports = (_env, options) => {
             ].filter(Boolean),
         // Configuration for webpack-dev-server
         devServer: {
-            port: 8080,
             hot: true
         }
     }
