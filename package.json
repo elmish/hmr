@@ -5,6 +5,7 @@
         "test": "tests"
     },
     "scripts": {
+        "postinstall": "dotnet tool restore",
         "tests:watch-webpack": "cd tests/webpack && webpack serve --mode development --port 3000",
         "tests:watch-parcel": "cd tests/parcel && parcel serve index.html --port 3001",
         "tests:watch-vite": "cd tests && vite --3002",
