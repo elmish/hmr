@@ -8,6 +8,7 @@ open Elmish
 [<AutoOpen>]
 module Common =
 
+    [<NoComparison; NoEquality>]
     type LazyProps<'model> = {
         model: 'model
         render: unit -> ReactElement
