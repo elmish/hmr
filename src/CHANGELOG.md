@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.2.1 - 2021-11-08
+
+* Fix GIF url in the README
+
 ## 4.2.0 - 2021-11-08
 
 * Fix #29: Add support for Webpack, Parcel and Vite
