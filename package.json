@@ -10,25 +10,33 @@
         "tests:watch-parcel": "cd tests/parcel && parcel serve index.html --port 3001",
         "tests:watch-vite": "cd tests && vite --port 3002",
         "tests:watch-fable": "cd tests && dotnet fable --watch --outDir fableBuild",
-        "tests:watch": "concurrently -p none 'npm:tests:watch-*'"
+        "pretests:watch": "shx rm -rf tests/fableBuild",
+        "tests:watch": "concurrently -p none 'npm:tests:watch-*'",
+        "docs:watch": "nacara watch",
+        "docs:build": "nacara build",
+        "docs:publish": "nacara build && gh-pages -d docs_deploy",
+        "release": "node ./scripts/release-nuget.js src Fable.Elmish.HMR.fsproj"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/elmish/hmr.git"
     },
     "devDependencies": {
+        "bulma": "^0.9.3",
         "concurrently": "^6.3.0",
+        "gatsby-remark-vscode": "^3.3.0",
         "html-webpack-plugin": "^5.5.0",
-        "nacara": "^1.1.0",
-        "nacara-layout-standard": "^1.1.0",
+        "nacara": "^1.2.0",
+        "nacara-layout-standard": "^1.2.0",
         "parcel": "^2.0.0",
+        "shx": "^0.3.3",
         "vite": "^2.6.13",
+        "vscode-theme-onelight": "github:akamud/vscode-theme-onelight",
         "webpack": "^5.62.1",
         "webpack-cli": "^4.9.1",
         "webpack-dev-server": "^4.4.0"
     },
     "dependencies": {
-        "bulma": "^0.9.3",
         "react": "^17.0.2",
         "react-dom": "^17.0.2"
     }

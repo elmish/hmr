@@ -1,0 +1,48 @@
+{
+    "siteMetadata": {
+        "title": "Elmish.HMR",
+        "url": "https://elmish.github.io",
+        "baseUrl": "/hmr/",
+        "editUrl" : "https://github.com/elmish/hmr/edit/master/docs"
+    },
+    "navbar": {
+        "start": [
+            {
+                "pinned": true,
+                "label": "Version",
+                "items": [
+                    {
+                        "label": "Latest",
+                        "url": "/hmr/index.html"
+                    },
+                    {
+                        "label": "v1.x & v2.x",
+                        "url": "/hmr/v1_and_v2.html"
+                    }
+                ]
+            }
+        ],
+        "end": [
+            {
+                "url": "https://github.com/elmish/hmr",
+                "icon": "fab fa-2x fa-github",
+                "label": "GitHub"
+            }
+        ]
+    },
+    "remarkPlugins": [
+        {
+            "resolve": "gatsby-remark-vscode",
+            "property": "remarkPlugin",
+            "options": {
+                "theme": "Atom One Light",
+                "extensions": [
+                    "vscode-theme-onelight"
+                ]
+            }
+        }
+    ],
+    "layouts": [
+        "nacara-layout-standard"
+    ]
+}
