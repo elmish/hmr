@@ -21,7 +21,6 @@ out
 
 .vs
 
-Directory.Build.props
 temp
 paket-files
 

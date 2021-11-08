@@ -1,0 +1,30 @@
+<Project>
+	<PropertyGroup>
+		<!-- Make all the projects use the highest warning level -->
+		<WarningLevel>5</WarningLevel>
+	</PropertyGroup>
+	<!-- NuGet Metadata -->
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<RepositoryUrl>https://github.com/elmish/hmr.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/elmish/hmr</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<Description>Hot Module Replacement for Elmish apps</Description>
+		<PackageTags>fable;elmish;fsharp;hmr</PackageTags>
+		<Authors>Maxime Mangel</Authors>
+	</PropertyGroup>
+	<!-- For SourceLink. See: https://github.com/dotnet/sourcelink#using-source-link-in-net-projects -->
+	<PropertyGroup>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="$(MSBuildThisFileDirectory)\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+		<None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+</Project>
