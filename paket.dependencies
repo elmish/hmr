@@ -1,14 +1,15 @@
 source https://nuget.org/api/v2
 
-nuget FSharp.Core  redirects:force, content:none
+nuget FSharp.Core ~> 5 redirects:force, content:none
 nuget Fable.Elmish
 nuget Fable.Elmish.Browser
 nuget Fable.Elmish.React
+nuget Microsoft.SourceLink.GitHub copy_local: true
 
 group Tests
     source https://nuget.org/api/v2
 
-    nuget FSharp.Core  redirects:force, content:none
+    nuget FSharp.Core ~> 5 redirects:force, content:none
 
     nuget Fable.Core
     nuget Fable.Elmish
