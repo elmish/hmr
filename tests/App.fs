@@ -4,6 +4,13 @@ open Elmish
 open Feliz
 open Feliz.Bulma
 open Fable.Core
+open Browser
+
+type Bundler =
+    | Webpack
+    | Vite
+    | Parcel
+    | Unkownn
 
 [<RequireQualifiedAccess>]
 type Page =
@@ -15,6 +22,7 @@ type Model =
         CurrentRoute : Router.Route option
         ActivePage : Page
         Value : int
+        Bundler : Bundler
     }
 
 type Msg =
@@ -50,10 +58,18 @@ let private setRoute (result: Option<Router.Route>) (model : Model) =
 
 
 let private init (optRoute : Router.Route option) =
+    let bundler =
+        match int window.location.port with
+        | 3000 -> Webpack
+        | 3001 -> Parcel
+        | 3002 -> Vite
+        | _ -> Unkownn
+
     {
         CurrentRoute = None
         ActivePage = Page.Home
         Value = 0
+        Bundler = bundler
     }
     |> setRoute optRoute
 
@@ -74,7 +90,7 @@ let private update (msg : Msg) (model : Model) =
 
 let private liveCounter model =
     Bulma.hero [
-        hero.isLarge
+        hero.isMedium
 
         prop.children [
             Bulma.heroBody [
@@ -152,9 +168,30 @@ let private renderActivePage (page : Page) =
         content
     ]
 
+let private renderBundlerInformation (bundler : Bundler) =
+    let bundlerText =
+        match bundler with
+        | Webpack -> "Webpack"
+        | Parcel -> "Parcel"
+        | Vite -> "Vite"
+        | Unkownn -> "Unkown"
+
+    Bulma.section [
+        Bulma.text.p [
+            text.hasTextCentered
+
+            prop.children [
+                Html.text "This is page is running using: "
+                Html.text bundlerText
+            ]
+        ]
+    ]
+
 let private view (model : Model) (dispatch : Dispatch<Msg>) =
     Html.div [
         navbar model
+
+        renderBundlerInformation model.Bundler
 
         renderActivePage model.ActivePage
 
@@ -162,6 +199,7 @@ let private view (model : Model) (dispatch : Dispatch<Msg>) =
             liveCounter model
         ]
     ]
+
 
 open Elmish.UrlParser
 open Elmish.HMR
