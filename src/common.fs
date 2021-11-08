@@ -29,17 +29,29 @@ module Common =
 
             do base.setInitState({ HMRCount = hmrCount})
 
+            member this.shouldComponentUpdateHMR nextProps =
+                let currentHmrCount : int = window?Elmish_HMR_Count
+                if currentHmrCount > this.state.HMRCount then
+                    this.setState(fun _prevState _props ->
+                        { HMRCount = currentHmrCount }
+                    )
+                    // An HMR call has been triggered between two frames we force a rendering
+                    true
+                else
+                    not <| this.props.equal this.props.model nextProps.model
+
             override this.shouldComponentUpdate(nextProps, _nextState) =
-                if HMR.active then
-                    let currentHmrCount : int = window?Elmish_HMR_Count
-                    if currentHmrCount > this.state.HMRCount then
-                        this.setState(fun _prevState _props ->
-                            { HMRCount = currentHmrCount }
-                        )
-                        // An HMR call has been triggered between two frames we force a rendering
-                        true
-                    else
-                        not <| this.props.equal this.props.model nextProps.model
+                // Vite needs to be the first HMR tested
+                // because Vite is pretty stricit about how HMR is detected
+                if HMR.Vite.active then
+                    this.shouldComponentUpdateHMR nextProps
+
+                else if HMR.Webpack.active then
+                    this.shouldComponentUpdateHMR nextProps
+
+                else if HMR.Parcel.active then
+                    this.shouldComponentUpdateHMR nextProps
+
                 else
                     not <| this.props.equal this.props.model nextProps.model
 

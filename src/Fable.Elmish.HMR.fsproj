@@ -3,7 +3,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="bindings.fs" />
+    <Compile Include="HMR.Webpack.fs" />
+    <Compile Include="HMR.Vite.fs" />
+    <Compile Include="HMR.Parcel.fs" />
     <Compile Include="common.fs" />
     <Compile Include="hmr.fs" />
   </ItemGroup>

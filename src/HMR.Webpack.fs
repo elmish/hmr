@@ -1,4 +1,4 @@
-module HMR
+module HMR.Webpack
 
 open Fable.Core
 
@@ -42,6 +42,9 @@ type ApplyOptions =
 
 [<AllowNullLiteral>]
 type IHot =
+
+    /// Optional data coming from disposed module
+    abstract data : obj option
 
     /// **Description**
     /// Retrieve the current status of the hot module replacement process.
@@ -193,21 +196,15 @@ type IHot =
     ///
     abstract removeStatusHandler: callback: (obj -> unit) -> unit
 
-type IModule =
-    abstract hot: IHot with get, set
+// Webpack can support HMR via `import.meta.webpackHot` and `module.hot`
+// But in order to make this module Webpack specific we only bind to `import.meta.webpackHot`
+// Indeed, Parcel is using `module.hot`
+// In case, someone use Elmish.HMR with an old Webpack module which doesn't support
+// `import.meta.webpackHot` the HMR support will be done indirectly via HMR.Parcel module
+// This is to try keep a clean written and generated code
 
-[<Emit("import.meta.hot ? import.meta.hot : (import.meta.webpackHot ? import.meta.webpackHot : module.hot)")>]
+[<Emit("import.meta.webpackHot")>]
 let hot : IHot = jsNative
 
-// [<Emit("module.hot")>]
-// let private hotViaModule : IHot = jsNative
-
-// let inline hot () : IHot =
-//     if not (isNull hotViaMeta) then
-//         hotViaMeta
-//     else
-//         hotViaModule
-
-
-[<Emit("import.meta.hot ? import.meta.hot : (import.meta.webpackHot ? import.meta.webpackHot : module.hot)")>]
+[<Emit("import.meta.webpackHot")>]
 let active : bool = jsNative

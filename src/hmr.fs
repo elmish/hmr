@@ -7,11 +7,16 @@ open Elmish
 [<RequireQualifiedAccess>]
 module Program =
 
+    type Msg<'msg> =
+        | UserMsg of 'msg
+        | Stop
 
-    open Fable.Core
-    open Fable.Core.JsInterop
+    type Model<'model> =
+        | Inactive
+        | Active of 'model
 
     module Internal =
+
         type Platform =
             | Browser
             | ReactNative
@@ -21,56 +26,55 @@ module Program =
             | "ReactNative" -> ReactNative
             | _ -> Browser
 
-        let tryRestoreState (hot : HMR.IHot) =
+        let tryRestoreState (hmrState : Model<_> ref) (data : obj) =
             match platform with
             | ReactNative ->
-                let hmrState = window?react_native_elmish_hmr_state
-                if not (isNull hmrState) then
-                    Some hmrState
-                else
-                    None
-            | Browser ->
-                let data = hot?data
-                if not (isNull data) && not (isNull data?hmrState) then
-                    Some data?hmrState
-                else
-                    None
+                let savedHmrState = window?react_native_elmish_hmr_state
+                if not (isNull (box savedHmrState)) then
+                    hmrState := savedHmrState
 
-        let saveState (data : obj) (hmrState : obj) =
+            | Browser ->
+                if not (isNull data) && not (isNull data?hmrState) then
+                    hmrState := data?hmrState
+
+        let saveState (data : obj) (hmrState : Model<_>) =
             match platform with
             | ReactNative ->
                 window?react_native_elmish_hmr_state <- hmrState
             | Browser ->
                 data?hmrState <- hmrState
 
-    type Msg<'msg> =
-        | UserMsg of 'msg
-        | Stop
 
-    type Model<'model> =
-        | Inactive
-        | Active of 'model
+    let inline private updateElmish_HMR_Count () =
+        window?Elmish_HMR_Count <-
+            if isNull window?Elmish_HMR_Count then
+                0
+            else
+                window?Elmish_HMR_Count + 1
 
     /// Start the dispatch loop with `'arg` for the init() function.
     let inline runWith (arg: 'arg) (program: Program<'arg, 'model, 'msg, 'view>) =
 #if !DEBUG
         Program.runWith arg program
 #else
-        let mutable hmrState : obj = null
+        let hmrState : Model<'model> ref = ref (unbox null)
 
-        if HMR.active then
-            window?Elmish_HMR_Count <-
-                if isNull window?Elmish_HMR_Count then
-                    0
-                else
-                    window?Elmish_HMR_Count + 1
+        // Vite needs to be the first HMR tested
+        // because Vite is pretty stricit about how HMR is detected
+        if HMR.Vite.active then
+            updateElmish_HMR_Count ()
+            HMR.Vite.hot.accept()
+            Internal.tryRestoreState hmrState HMR.Vite.hot.data
 
-            HMR.hot.accept() |> ignore
+        else if HMR.Webpack.active then
+            updateElmish_HMR_Count ()
+            HMR.Webpack.hot.accept()
+            Internal.tryRestoreState hmrState HMR.Webpack.hot.data
 
-            match Internal.tryRestoreState HMR.hot with
-            | Some previousState ->
-                hmrState <- previousState
-            | None -> ()
+        else if HMR.Parcel.active then
+            updateElmish_HMR_Count ()
+            HMR.Parcel.hot.accept()
+            Internal.tryRestoreState hmrState HMR.Parcel.hot.data
 
         let map (model, cmd) =
             model, cmd |> Cmd.map UserMsg
@@ -89,17 +93,18 @@ module Program =
                         Inactive, Cmd.none
                     |> map
 
-            hmrState <- newModel
+            hmrState := newModel
+
             newModel,cmd
 
         let createModel (model, cmd) =
             Active model, cmd
 
         let mapInit init =
-            if isNull hmrState then
+            if isNull (box !hmrState) then
                 init >> map >> createModel
             else
-                (fun _ -> unbox<Model<_>> hmrState, Cmd.none)
+                (fun _ -> !hmrState, Cmd.none)
 
         let mapSetState setState (model : Model<'model>) dispatch =
             match model with
@@ -109,12 +114,29 @@ module Program =
 
         let hmrSubscription =
             let handler dispatch =
-                if HMR.active then
-                    HMR.hot.dispose(fun data ->
-                        Internal.saveState data hmrState
+                // Vite needs to be the first HMR tested
+                // because Vite is pretty stricit about how HMR is detected
+                if HMR.Vite.active then
+                    HMR.Vite.hot.dispose(fun data ->
+                        Internal.saveState data !hmrState
 
                         dispatch Stop
                     )
+
+                else if HMR.Webpack.active then
+                    HMR.Webpack.hot.dispose(fun data ->
+                        Internal.saveState data !hmrState
+
+                        dispatch Stop
+                    )
+
+                else if HMR.Parcel.active then
+                    HMR.Parcel.hot.dispose(fun data ->
+                        Internal.saveState data !hmrState
+
+                        dispatch Stop
+                    )
+
             [ handler ]
 
         let mapSubscribe subscribe model =
@@ -176,10 +198,22 @@ You should not see this message
         Navigation.Program.toNavigable parser urlUpdate program
 #else
         let onLocationChange (dispatch : Dispatch<_ Navigation.Navigable>) =
-            // if not (isNull hot) then
-            //     hot.dispose(fun data ->
-            //         Navigation.Program.Internal.unsubscribe ()
-            //     )
+            // Vite needs to be the first HMR tested
+            // because Vite is pretty stricit about how HMR is detected
+            if HMR.Vite.active then
+                HMR.Vite.hot.dispose(fun _ ->
+                    Navigation.Program.Internal.unsubscribe ()
+                )
+
+            else if HMR.Webpack.active then
+                HMR.Webpack.hot.dispose(fun _ ->
+                    Navigation.Program.Internal.unsubscribe ()
+                )
+
+            else if HMR.Parcel.active then
+                HMR.Parcel.hot.dispose(fun _ ->
+                    Navigation.Program.Internal.unsubscribe ()
+                )
 
             Navigation.Program.Internal.subscribe dispatch
 
