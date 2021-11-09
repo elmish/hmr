@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.3.0 - 2021-11-09
+
+* Rework bundler detection adding `try ... with` when detecting the bundler used to avoid `RefrenceError` exception
+
 ## 4.2.1 - 2021-11-08
 
 * Fix GIF url in the README
