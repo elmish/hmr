@@ -30,30 +30,24 @@ module Common =
 
             do base.setInitState({ HMRCount = hmrCount})
 
-            member this.shouldComponentUpdateHMR nextProps =
-                let currentHmrCount : int = window?Elmish_HMR_Count
-                if currentHmrCount > this.state.HMRCount then
-                    this.setState(fun _prevState _props ->
-                        { HMRCount = currentHmrCount }
-                    )
-                    // An HMR call has been triggered between two frames we force a rendering
-                    true
-                else
-                    not <| this.props.equal this.props.model nextProps.model
-
             override this.shouldComponentUpdate(nextProps, _nextState) =
-                // Vite needs to be the first HMR tested
-                // because Vite is pretty stricit about how HMR is detected
-                if HMR.Vite.active then
-                    this.shouldComponentUpdateHMR nextProps
+                // Note: It seems like if the tabs is not focus
+                // It can happen that the re-render doesn't happen
+                // I am not sure why
+                // In theory, this should not be a problem most of the times
+                match Bundler.current with
+                | Some _ ->
+                    let currentHmrCount : int = window?Elmish_HMR_Count
+                    if currentHmrCount > this.state.HMRCount then
+                        this.setState(fun _prevState _props ->
+                            { HMRCount = currentHmrCount }
+                        )
+                        // An HMR call has been triggered between two frames we force a rendering
+                        true
+                    else
+                        not <| this.props.equal this.props.model nextProps.model
 
-                else if HMR.Webpack.active then
-                    this.shouldComponentUpdateHMR nextProps
-
-                else if HMR.Parcel.active then
-                    this.shouldComponentUpdateHMR nextProps
-
-                else
+                | None ->
                     not <| this.props.equal this.props.model nextProps.model
 
             override this.render () =

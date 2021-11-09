@@ -15,6 +15,7 @@ module Program =
         | Inactive
         | Active of 'model
 
+
     module Internal =
 
         type Platform =
@@ -59,22 +60,28 @@ module Program =
 #else
         let hmrState : Model<'model> ref = ref (unbox null)
 
-        // Vite needs to be the first HMR tested
-        // because Vite is pretty stricit about how HMR is detected
-        if HMR.Vite.active then
+        match Bundler.current with
+        | Some current ->
             updateElmish_HMR_Count ()
-            HMR.Vite.hot.accept()
-            Internal.tryRestoreState hmrState HMR.Vite.hot.data
 
-        else if HMR.Webpack.active then
-            updateElmish_HMR_Count ()
-            HMR.Webpack.hot.accept()
-            Internal.tryRestoreState hmrState HMR.Webpack.hot.data
+            let hmrDataObject =
+                match current with
+                | Bundler.Vite ->
+                    HMR.Vite.hot.accept()
+                    HMR.Vite.hot.data
 
-        else if HMR.Parcel.active then
-            updateElmish_HMR_Count ()
-            HMR.Parcel.hot.accept()
-            Internal.tryRestoreState hmrState HMR.Parcel.hot.data
+                | Bundler.WebpackESM ->
+                    HMR.Webpack.hot.accept()
+                    HMR.Webpack.hot.data
+
+                | Bundler.WebpackCJS_and_Parcel ->
+                    HMR.Parcel.hot.accept()
+                    HMR.Parcel.hot.data
+
+            Internal.tryRestoreState hmrState hmrDataObject
+
+        | None ->
+            ()
 
         let map (model, cmd) =
             model, cmd |> Cmd.map UserMsg
@@ -114,28 +121,32 @@ module Program =
 
         let hmrSubscription =
             let handler dispatch =
-                // Vite needs to be the first HMR tested
-                // because Vite is pretty stricit about how HMR is detected
-                if HMR.Vite.active then
-                    HMR.Vite.hot.dispose(fun data ->
-                        Internal.saveState data !hmrState
+                match Bundler.current with
+                | Some current ->
+                    match current with
+                    | Bundler.Vite ->
+                        HMR.Vite.hot.dispose(fun data ->
+                            Internal.saveState data hmrState.Value
 
-                        dispatch Stop
-                    )
+                            dispatch Stop
+                        )
 
-                else if HMR.Webpack.active then
-                    HMR.Webpack.hot.dispose(fun data ->
-                        Internal.saveState data !hmrState
+                    | Bundler.WebpackESM ->
+                        HMR.Webpack.hot.dispose(fun data ->
+                            Internal.saveState data hmrState.Value
 
-                        dispatch Stop
-                    )
+                            dispatch Stop
+                        )
 
-                else if HMR.Parcel.active then
-                    HMR.Parcel.hot.dispose(fun data ->
-                        Internal.saveState data !hmrState
+                    | Bundler.WebpackCJS_and_Parcel ->
+                        HMR.Parcel.hot.dispose(fun data ->
+                            Internal.saveState data hmrState.Value
 
-                        dispatch Stop
-                    )
+                            dispatch Stop
+                        )
+
+                | None ->
+                    ()
 
             [ handler ]
 
@@ -198,24 +209,26 @@ You should not see this message
         Navigation.Program.toNavigable parser urlUpdate program
 #else
         let onLocationChange (dispatch : Dispatch<_ Navigation.Navigable>) =
-            // Vite needs to be the first HMR tested
-            // because Vite is pretty stricit about how HMR is detected
-            if HMR.Vite.active then
-                HMR.Vite.hot.dispose(fun _ ->
-                    Navigation.Program.Internal.unsubscribe ()
-                )
+            match Bundler.current with
+            | Some current ->
+                match current with
+                | Bundler.Vite ->
+                    HMR.Vite.hot.dispose(fun _ ->
+                        Navigation.Program.Internal.unsubscribe ()
+                    )
 
-            else if HMR.Webpack.active then
-                HMR.Webpack.hot.dispose(fun _ ->
-                    Navigation.Program.Internal.unsubscribe ()
-                )
+                | Bundler.WebpackESM ->
+                    HMR.Webpack.hot.dispose(fun _ ->
+                        Navigation.Program.Internal.unsubscribe ()
+                    )
 
-            else if HMR.Parcel.active then
-                HMR.Parcel.hot.dispose(fun _ ->
-                    Navigation.Program.Internal.unsubscribe ()
-                )
+                | Bundler.WebpackCJS_and_Parcel ->
+                    HMR.Parcel.hot.dispose(fun _ ->
+                        Navigation.Program.Internal.unsubscribe ()
+                    )
 
-            Navigation.Program.Internal.subscribe dispatch
+            | None ->
+                Navigation.Program.Internal.subscribe dispatch
 
         Navigation.Program.Internal.toNavigableWith parser urlUpdate program onLocationChange
 #endif
