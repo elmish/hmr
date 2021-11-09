@@ -5,6 +5,8 @@ open Feliz
 open Feliz.Bulma
 open Fable.Core
 open Browser
+open Elmish.UrlParser
+open Elmish.HMR
 
 type Bundler =
     | Webpack
@@ -89,29 +91,20 @@ let private update (msg : Msg) (model : Model) =
         , Cmd.OfPromise.perform tick () Tick
 
 let private liveCounter model =
-    Bulma.hero [
-        hero.isMedium
+    Bulma.section [
+        Bulma.text.div [
+            text.hasTextCentered
 
-        prop.children [
-            Bulma.heroBody [
-                Bulma.text.div [
-                    text.hasTextCentered
-                    prop.style [
-                        style.width (length.percent 100)
-                    ]
-
-                    prop.children [
-                        Html.div [
-                            Html.text "Application is running since "
-                            Html.text (string model.Value)
-                            Html.text " seconds"
-                        ]
-
-                        Html.br [ ]
-
-                        Html.text "Change me and check that the timer has not been reset"
-                    ]
+            prop.children [
+                Html.div [
+                    Html.text "Application is running since "
+                    Html.text (string model.Value)
+                    Html.text " seconds"
                 ]
+
+                Html.br [ ]
+
+                Html.text "Change me and check that the timer has not been reset"
             ]
         ]
     ]
@@ -187,22 +180,46 @@ let private renderBundlerInformation (bundler : Bundler) =
         ]
     ]
 
+let private lazyViewTest (_value : int) =
+    Bulma.section [
+        Bulma.text.div [
+            text.hasTextCentered
+
+            prop.children [
+                Html.p "Change this text and see that it has been changed after HMR being applied"
+                Html.br [ ]
+                Html.p "If HMR was not suppored this text would not change until a full refresh of the page"
+            ]
+        ]
+    ]
+
 let private view (model : Model) (dispatch : Dispatch<Msg>) =
     Html.div [
         navbar model
 
         renderBundlerInformation model.Bundler
 
+        Html.hr [ ]
+
         renderActivePage model.ActivePage
+
+        Html.hr [ ]
 
         Bulma.container [
             liveCounter model
         ]
+
+        Html.hr [ ]
+
+        // We are passing a stable value
+        // because we want to test that this is the HMR counter
+        // increment which cause the changes and not the passed value
+        lazyView lazyViewTest 2
+
+        Html.hr [ ]
     ]
 
 
-open Elmish.UrlParser
-open Elmish.HMR
 
 // Use a subscription to trigger the Tick system
 // If we try to trigger the ticks from the Update function
