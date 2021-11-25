@@ -32,11 +32,11 @@ module Program =
             | ReactNative ->
                 let savedHmrState = window?react_native_elmish_hmr_state
                 if not (isNull (box savedHmrState)) then
-                    hmrState := savedHmrState
+                    hmrState.Value <- savedHmrState
 
             | Browser ->
                 if not (isNull data) && not (isNull data?hmrState) then
-                    hmrState := data?hmrState
+                    hmrState.Value <- data?hmrState
 
         let saveState (data : obj) (hmrState : Model<_>) =
             match platform with
@@ -100,7 +100,7 @@ module Program =
                         Inactive, Cmd.none
                     |> map
 
-            hmrState := newModel
+            hmrState.Value <- newModel
 
             newModel,cmd
 
@@ -108,10 +108,10 @@ module Program =
             Active model, cmd
 
         let mapInit init =
-            if isNull (box !hmrState) then
+            if isNull (box hmrState.Value) then
                 init >> map >> createModel
             else
-                (fun _ -> !hmrState, Cmd.none)
+                (fun _ -> hmrState.Value, Cmd.none)
 
         let mapSetState setState (model : Model<'model>) dispatch =
             match model with
