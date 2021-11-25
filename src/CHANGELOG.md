@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 5.0.0 - 2021-11-25
+
+* Make a new major released which include un-listed version 4.2.0, 4.2.1, 4.3.0, and 4.3.1
+* Add a comment on Vite HMR support detection to redirect the user to the issue explaining what is happening.
+* Fix `Program.toNavigable` version when a Bundler is detected. It was not registering the listener for the location change.
+
 ## 4.3.1 - 2021-11-15
 
 * Fix #34: Lower FSharp.Core requirement
