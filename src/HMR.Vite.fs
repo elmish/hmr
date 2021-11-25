@@ -90,5 +90,5 @@ type IHot =
 [<Global>]
 let hot : IHot = jsNative
 
-[<Emit("import.meta.hot")>]
+[<Emit("(import.meta.hot /* If error see https://github.com/elmish/hmr/issues/35 */)")>]
 let active : bool = jsNative
