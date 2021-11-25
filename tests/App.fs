@@ -188,7 +188,7 @@ let private lazyViewTest (_value : int) =
             prop.children [
                 Html.p "Change this text and see that it has been changed after HMR being applied"
                 Html.br [ ]
-                Html.p "If HMR was not suppored this text would not change until a full refresh of the page"
+                Html.p "If HMR was not supported this text would not change until a full refresh of the page"
             ]
         ]
     ]
