@@ -203,8 +203,8 @@ type IHot =
 // `import.meta.webpackHot` the HMR support will be done indirectly via HMR.Parcel module
 // This is to try keep a clean written and generated code
 
-[<Emit("import.meta.webpackHot")>]
+[<Emit("(import.meta.hot /* If error see https://github.com/elmish/hmr/issues/35 */)")>]
 let hot : IHot = jsNative
 
-[<Emit("import.meta.webpackHot")>]
+[<Emit("(import.meta.hot /* If error see https://github.com/elmish/hmr/issues/35 */)")>]
 let active : bool = jsNative
