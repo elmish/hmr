@@ -227,6 +227,8 @@ You should not see this message
                         Navigation.Program.Internal.unsubscribe ()
                     )
 
+                Navigation.Program.Internal.subscribe dispatch
+
             | None ->
                 Navigation.Program.Internal.subscribe dispatch
 
