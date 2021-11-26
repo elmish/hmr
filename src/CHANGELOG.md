@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 5.1.0 - 2021-11-26
+
+* PR #36: Add a comment on Webpack HMR support detection to redirect the user to the issue explaining what is happening.
+
 ## 5.0.0 - 2021-11-25
 
 * Make a new major released which include un-listed version 4.2.0, 4.2.1, 4.3.0, and 4.3.1
