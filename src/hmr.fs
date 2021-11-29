@@ -87,22 +87,18 @@ module Program =
             model, cmd |> Cmd.map UserMsg
 
         let mapUpdate update (msg : Msg<'msg>) (model : Model<'model>) =
-            let newModel,cmd =
-                match msg with
-                    | UserMsg msg ->
-                        match model with
-                        | Inactive -> model, Cmd.none
-                        | Active userModel ->
-                            let newModel, cmd = update msg userModel
-                            Active newModel, cmd
+            match msg with
+                | UserMsg msg ->
+                    match model with
+                    | Inactive -> map(model, Cmd.none)
+                    | Active userModel ->
+                        let newModel, cmd = update msg userModel
+                        let newModel, cmd = map(Active newModel, cmd)
+                        hmrState.Value <- newModel
+                        newModel, cmd
 
-                    | Stop ->
-                        Inactive, Cmd.none
-                    |> map
-
-            hmrState.Value <- newModel
-
-            newModel,cmd
+                | Stop ->
+                    map(Inactive, Cmd.none)
 
         let createModel (model, cmd) =
             Active model, cmd
