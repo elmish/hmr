@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 6.0.0-beta-002 - 2021-11-30
+
 * Remove Fable.Elmish.Browser dependency
+* Fix HMR support, it was not working in beta-001
 
 ## 6.0.0-beta-001 - 2021-11-29
 
