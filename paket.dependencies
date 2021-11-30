@@ -2,7 +2,6 @@ source https://nuget.org/api/v2
 
 nuget FSharp.Core ~> 4.7.2 redirects:force, content:none
 nuget Fable.Elmish prerelease
-nuget Fable.Elmish.Browser prerelease
 nuget Fable.Elmish.React prerelease
 nuget Microsoft.SourceLink.GitHub copy_local: true
 
