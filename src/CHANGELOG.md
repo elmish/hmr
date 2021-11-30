@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 5.2.0 - 2021-11-30
+
+* PR #37: Mitigate problem where `hot.dispose` run late compared to `hot.accept` (Vite seems to be doing that sometimes...)
+
 ## 5.1.0 - 2021-11-26
 
 * PR #36: Add a comment on Webpack HMR support detection to redirect the user to the issue explaining what is happening.
