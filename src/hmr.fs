@@ -96,10 +96,13 @@ module Program =
             model, cmd
 
         let mapInit userInit args =
-            let (userModel, userCmd) = userInit args
+            if isNull (box hmrState.Value) then
+                let (userModel, userCmd) = userInit args
 
-            userModel
-            , Cmd.map UserMsg userCmd
+                userModel
+                , Cmd.map UserMsg userCmd
+            else
+                hmrState.Value, Cmd.none
 
         let mapSetState userSetState (userModel : 'model) dispatch =
             userSetState userModel (UserMsg >> dispatch)
