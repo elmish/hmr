@@ -13,7 +13,7 @@ paket add nuget Fable.Elmish.HMR
 
 ## Demo
 
-![hmr demo](https://raw.githubusercontent.com/elmish/hmr/master/docs/img/hmr_demo.gif)
+![hmr demo](https://raw.githubusercontent.com/elmish/hmr/master/docs/static/img/hmr_demo.gif)
 
 ## Development
 

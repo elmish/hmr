@@ -9,7 +9,7 @@ Elmish applications can benefit from Hot Module Replacement (known as HMR).
 
 This allow us to modify the application while it's running, without a full reload. Your application will now maintain its state between two changes.
 
-![hmr demo](/hmr/img/hmr_demo.gif)
+![hmr demo](/hmr/static/img/hmr_demo.gif)
 
 ## Installation
 Add Fable package with paket:
