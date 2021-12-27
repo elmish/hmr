@@ -39,6 +39,12 @@ Parcel and Vite, are supported since version 4.2.0. They don't require any speci
 
 ## Usage
 
+:::warning{title="Limitation"}
+Currently, Elmish.HMR only works when running a **single** Elmish instance with HMR enabled.
+
+If you need supports for multiple Elmish instances, please contribute it to Elmish.HMR via a PR.
+:::
+
 The package will include the HMR support only if you are building your program with `DEBUG` set in your compilation conditions. Fable adds it by default when in watch mode.
 
 You need to always include `open Elmish.HMR` after your others `open Elmish.XXX` statements. This is needed to shadow the supported APIs.
