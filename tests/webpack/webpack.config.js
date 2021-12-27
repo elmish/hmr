@@ -1,11 +1,14 @@
-const path = require("path");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function resolve(filePath) {
     return path.join(__dirname, filePath)
 }
 
-module.exports = (_env, options) => {
+export default (_env, options) => {
 
     var isDevelopment = options.mode === "development";
 
