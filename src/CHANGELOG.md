@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 6.0.0-beta-002 - 2021-11-30
+
+* Remove Fable.Elmish.Browser dependency
+* Fix HMR support, it was not working in beta-001
+
+## 6.0.0-beta-001 - 2021-11-29
+
+* Support for elmish v4
+* Remove `Program.toNavigable` shadowing because `Elmish.Browser` can now remove its listeners by itself
+
+## 6.0.0 - 2021-11-29
+
+* UNLISTED
+* Support for elmish v4
+* Remove `Program.toNavigable` shadowing because `Elmish.Browser` can now remove its listeners by itself
+
 ## 5.2.0 - 2021-11-30
 
 * PR #37: Mitigate problem where `hot.dispose` run late compared to `hot.accept` (Vite seems to be doing that sometimes...)

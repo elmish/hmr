@@ -1,9 +1,8 @@
 source https://nuget.org/api/v2
 
 nuget FSharp.Core ~> 4.7.2 redirects:force, content:none
-nuget Fable.Elmish
-nuget Fable.Elmish.Browser
-nuget Fable.Elmish.React
+nuget Fable.Elmish prerelease
+nuget Fable.Elmish.React prerelease
 nuget Microsoft.SourceLink.GitHub copy_local: true
 
 group Tests
@@ -12,9 +11,9 @@ group Tests
     nuget FSharp.Core ~> 4.7.2 redirects:force, content:none
 
     nuget Fable.Core
-    nuget Fable.Elmish
-    nuget Fable.Elmish.Browser
-    nuget Fable.Elmish.React
+    nuget Fable.Elmish prerelease
+    nuget Fable.Elmish.Browser prerelease
+    nuget Fable.Elmish.React prerelease
     nuget Fable.Promise
     nuget Feliz
     nuget Feliz.Bulma

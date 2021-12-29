@@ -7,6 +7,7 @@ open Fable.Core
 open Browser
 open Elmish.UrlParser
 open Elmish.HMR
+open Elmish.Navigation
 
 type Bundler =
     | Webpack

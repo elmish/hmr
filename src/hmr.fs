@@ -11,11 +11,6 @@ module Program =
         | UserMsg of 'msg
         | Stop
 
-    type Model<'model> =
-        | Inactive
-        | Active of 'model
-
-
     module Internal =
 
         type Platform =
@@ -27,7 +22,7 @@ module Program =
             | "ReactNative" -> ReactNative
             | _ -> Browser
 
-        let tryRestoreState (hmrState : Model<_> ref) (data : obj) =
+        let tryRestoreState (hmrState : 'model ref) (data : obj) =
             match platform with
             | ReactNative ->
                 let savedHmrState = window?react_native_elmish_hmr_state
@@ -38,7 +33,7 @@ module Program =
                 if not (isNull data) && not (isNull data?hmrState) then
                     hmrState.Value <- data?hmrState
 
-        let saveState (data : obj) (hmrState : Model<_>) =
+        let saveState (data : obj) (hmrState : 'model) =
             match platform with
             | ReactNative ->
                 window?react_native_elmish_hmr_state <- hmrState
@@ -58,7 +53,7 @@ module Program =
 #if !DEBUG
         Program.runWith arg program
 #else
-        let hmrState : Model<'model> ref = ref (unbox null)
+        let hmrState : 'model ref = ref (unbox null)
 
         match Bundler.current with
         | Some current ->
@@ -83,37 +78,34 @@ module Program =
         | None ->
             ()
 
-        let map (model, cmd) =
-            model, cmd |> Cmd.map UserMsg
+        let mapUpdate userUpdate (msg : Msg<'msg>) (model : 'model) =
+            let newModel,cmd =
+                match msg with
+                | UserMsg userMsg ->
+                    userUpdate userMsg model
 
-        let mapUpdate update (msg : Msg<'msg>) (model : Model<'model>) =
-            match msg with
-            | UserMsg msg ->
-                match model with
-                | Inactive -> map(model, Cmd.none)
-                | Active userModel ->
-                    let newModel, cmd = update msg userModel
-                    let newModel, cmd = map(Active newModel, cmd)
-                    hmrState.Value <- newModel
-                    newModel, cmd
+                | Stop ->
+                    model, Cmd.none
 
-            | Stop ->
-                map(Inactive, Cmd.none)
+            hmrState.Value <- newModel
+
+            newModel
+            , Cmd.map UserMsg cmd
 
         let createModel (model, cmd) =
-            Active model, cmd
+            model, cmd
 
-        let mapInit init =
+        let mapInit userInit args =
             if isNull (box hmrState.Value) then
-                init >> map >> createModel
-            else
-                (fun _ -> hmrState.Value, Cmd.none)
+                let (userModel, userCmd) = userInit args
 
-        let mapSetState setState (model : Model<'model>) dispatch =
-            match model with
-            | Inactive -> ()
-            | Active userModel ->
-                setState userModel (UserMsg >> dispatch)
+                userModel
+                , Cmd.map UserMsg userCmd
+            else
+                hmrState.Value, Cmd.none
+
+        let mapSetState userSetState (userModel : 'model) dispatch =
+            userSetState userModel (UserMsg >> dispatch)
 
         let hmrSubscription =
             let handler dispatch =
@@ -147,41 +139,24 @@ module Program =
             [ handler ]
 
         let mapSubscribe subscribe model =
-            match model with
-            | Inactive -> Cmd.none
-            | Active userModel ->
-                Cmd.batch [ subscribe userModel |> Cmd.map UserMsg
-                            hmrSubscription ]
+            Cmd.batch [
+                subscribe model |> Cmd.map UserMsg
+                hmrSubscription
+            ]
 
-        let mapView view =
-            // This function will never be executed because we are using a local reference to access `program.view`.
-            // For example,
-            // ```fs
-            // let withReactUnoptimized placeholderId (program: Program<_,_,_,_>) =
-            //     let setState model dispatch =
-            //         Fable.Import.ReactDom.render(
-            //             lazyView2With (fun x y -> obj.ReferenceEquals(x,y)) program.view model dispatch,
-            //                                                                  ^-- Here program is coming from the function parameters and not
-            //                                                                      from the last program composition used to run the applicaiton
-            //             document.getElementById(placeholderId)
-            //         )
-            //
-            //     { program with setState = setState }
-            // ```*)
-            fun model dispatch ->
-                match model with
-                | Inactive ->
-                    """
-Your are using HMR and this Elmish application has been marked as inactive.
+        let mapView userView model dispatch =
+            userView model (UserMsg >> dispatch)
 
-You should not see this message
-                    """
-                    |> failwith
-                | Active userModel ->
-                    view userModel (UserMsg >> dispatch)
+        let mapTermination (predicate, terminate) =
+            let mapPredicate =
+                function
+                | UserMsg msg -> predicate msg
+                | Stop -> true
+
+            mapPredicate, terminate
 
         program
-        |> Program.map mapInit mapUpdate mapView mapSetState mapSubscribe
+        |> Program.map mapInit mapUpdate mapView mapSetState mapSubscribe mapTermination
         |> Program.runWith arg
 #endif
 
@@ -191,44 +166,6 @@ You should not see this message
         Program.run program
 #else
         runWith () program
-#endif
-
-    (*
-        Shadow: Fable.Elmish.Navigation
-    *)
-
-    let inline toNavigable
-        (parser : Navigation.Parser<'a>)
-        (urlUpdate : 'a->'model->('model * Cmd<'msg>))
-        (program : Program<'a,'model,'msg,'view>) =
-#if !DEBUG
-        Navigation.Program.toNavigable parser urlUpdate program
-#else
-        let onLocationChange (dispatch : Dispatch<_ Navigation.Navigable>) =
-            match Bundler.current with
-            | Some current ->
-                match current with
-                | Bundler.Vite ->
-                    HMR.Vite.hot.dispose(fun _ ->
-                        Navigation.Program.Internal.unsubscribe ()
-                    )
-
-                | Bundler.WebpackESM ->
-                    HMR.Webpack.hot.dispose(fun _ ->
-                        Navigation.Program.Internal.unsubscribe ()
-                    )
-
-                | Bundler.WebpackCJS_and_Parcel ->
-                    HMR.Parcel.hot.dispose(fun _ ->
-                        Navigation.Program.Internal.unsubscribe ()
-                    )
-
-                Navigation.Program.Internal.subscribe dispatch
-
-            | None ->
-                Navigation.Program.Internal.subscribe dispatch
-
-        Navigation.Program.Internal.toNavigableWith parser urlUpdate program onLocationChange
 #endif
 
     (*

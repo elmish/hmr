@@ -9,7 +9,7 @@ Elmish applications can benefit from Hot Module Replacement (known as HMR).
 
 This allow us to modify the application while it's running, without a full reload. Your application will now maintain its state between two changes.
 
-![hmr demo](/hmr/img/hmr_demo.gif)
+![hmr demo](/hmr/static/img/hmr_demo.gif)
 
 ## Installation
 Add Fable package with paket:
@@ -38,6 +38,12 @@ devServer: {
 Parcel and Vite, are supported since version 4.2.0. They don't require any specific configuration.
 
 ## Usage
+
+:::warning{title="Limitation"}
+Currently, Elmish.HMR only works when running a **single** Elmish instance with HMR enabled.
+
+If you need supports for multiple Elmish instances, please contribute it to Elmish.HMR via a PR.
+:::
 
 The package will include the HMR support only if you are building your program with `DEBUG` set in your compilation conditions. Fable adds it by default when in watch mode.
 
