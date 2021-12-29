@@ -3,7 +3,8 @@
         "title": "Elmish.HMR",
         "url": "https://elmish.github.io",
         "baseUrl": "/hmr/",
-        "editUrl" : "https://github.com/elmish/hmr/edit/master/docs"
+        "editUrl" : "https://github.com/elmish/hmr/edit/master/docs",
+        "favIcon": "static/img/logo.png"
     },
     "navbar": {
         "start": [
