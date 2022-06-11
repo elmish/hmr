@@ -20,7 +20,7 @@ paket add nuget Fable.Elmish.HMR
 
 ## Webpack configuration
 
-Add `hot: true` and `inline: true` to your `devServer` node.
+Add `hot: true` and `inline: true` (only for webpack < v5.0.0) to your `devServer` node.
 
 Example:
 
