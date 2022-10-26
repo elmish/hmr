@@ -4,6 +4,7 @@ open Fable.Core.JsInterop
 open Fable.React
 open Browser
 open Elmish
+open Elmish.React.Internal
 
 [<AutoOpen>]
 module Common =
