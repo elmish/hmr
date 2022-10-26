@@ -135,12 +135,14 @@ module Program =
 
                 | None ->
                     ()
+                // nothing to cleanup
+                {new System.IDisposable with member _.Dispose () = ()}
 
-            [ handler ]
+            [["Hmr"], handler ]
 
         let mapSubscribe subscribe model =
-            Cmd.batch [
-                subscribe model |> Cmd.map UserMsg
+            Sub.batch [
+                subscribe model |> Sub.map "HmrUser" UserMsg
                 hmrSubscription
             ]
 
