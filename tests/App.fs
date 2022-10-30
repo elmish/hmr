@@ -24,11 +24,14 @@ type Model =
         CurrentRoute : Router.Route option
         ActivePage : Page
         Value : int
+        Reloads : int
         Bundler : Bundler
     }
 
 type Msg =
+    // DU parameter needed: https://github.com/fable-compiler/Fable/issues/3102
     | Tick of unit
+    | Loaded of unit
 
 let private setRoute (result: Option<Router.Route>) (model : Model) =
     let model = { model with CurrentRoute = result }
@@ -71,6 +74,7 @@ let private init (optRoute : Router.Route option) =
         CurrentRoute = None
         ActivePage = Page.Home
         Value = 0
+        Reloads = -1 // initial load doesn't count
         Bundler = bundler
     }
     |> setRoute optRoute
@@ -82,21 +86,30 @@ let private update (msg : Msg) (model : Model) =
             Value = model.Value + 1
         }
         , Cmd.none
+    | Loaded _ ->
+        { model with
+            Reloads = model.Reloads + 1
+        }
+        , Cmd.none
 
-// We are not using Hooks for the Tick system to test Elmish HMR
-// support and not React HMR or React fast refresh
+// We are not using Hooks for the Tick system so Elmish HMR
+// support is tested and not React HMR or React fast refresh
 
 module Sub =
-    let tick intervalMs onTick =
+    let tick intervalMs onTick onStarted =
         let subId = ["tick"]
         let start dispatch =
             let intervalId = JS.setInterval (fun () -> dispatch onTick) intervalMs
+            // setTimeout needed: https://github.com/elmish/elmish/issues/256
+            JS.setTimeout (fun () -> dispatch onStarted) 1 |> ignore
             { new System.IDisposable with
                 member _.Dispose() = JS.clearInterval intervalId }
         subId, start
 
 let private subscribe model =
-    [ Sub.tick 1000 (Tick ()) ]
+    // sub doesn't change if model changes, is running as long as app runs
+    // so we can use it to know when app reloads
+    [ Sub.tick 1000 (Tick ()) (Loaded ()) ]
 
 let private liveCounter model =
     Html.section [
@@ -108,7 +121,9 @@ let private liveCounter model =
                     Html.div [
                         Html.text "Application is running since "
                         Html.text (string model.Value)
-                        Html.text " seconds"
+                        Html.text " seconds with "
+                        Html.text (string model.Reloads)
+                        Html.text " reloads"
                     ]
 
                     Html.br [ ]
