@@ -16,4 +16,3 @@ group Tests
     nuget Fable.Elmish.React prerelease
     nuget Fable.Promise
     nuget Feliz >= 2 prerelease
-    nuget Feliz.Bulma
