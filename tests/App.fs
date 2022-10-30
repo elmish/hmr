@@ -29,9 +29,8 @@ type Model =
     }
 
 type Msg =
-    // DU parameter needed: https://github.com/fable-compiler/Fable/issues/3102
-    | Tick of unit
-    | Loaded of unit
+    | Tick
+    | Loaded
 
 let private setRoute (result: Option<Router.Route>) (model : Model) =
     let model = { model with CurrentRoute = result }
@@ -81,12 +80,12 @@ let private init (optRoute : Router.Route option) =
 
 let private update (msg : Msg) (model : Model) =
     match msg with
-    | Tick _ ->
+    | Tick ->
         { model with
             Value = model.Value + 1
         }
         , Cmd.none
-    | Loaded _ ->
+    | Loaded ->
         { model with
             Reloads = model.Reloads + 1
         }
@@ -109,7 +108,7 @@ module Sub =
 let private subscribe model =
     // sub doesn't change if model changes, is running as long as app runs
     // so we can use it to know when app reloads
-    [ Sub.tick 1000 (Tick ()) (Loaded ()) ]
+    [ Sub.tick 1000 Tick Loaded ]
 
 let private liveCounter model =
     Html.section [
