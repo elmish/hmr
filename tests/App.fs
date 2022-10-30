@@ -12,7 +12,7 @@ type Bundler =
     | Webpack
     | Vite
     | Parcel
-    | Unkownn
+    | Unknown
 
 [<RequireQualifiedAccess>]
 type Page =
@@ -65,7 +65,7 @@ let private init (optRoute : Router.Route option) =
         | 3000 -> Webpack
         | 3001 -> Parcel
         | 3002 -> Vite
-        | _ -> Unkownn
+        | _ -> Unknown
 
     {
         CurrentRoute = None
@@ -175,7 +175,7 @@ let private renderBundlerInformation (bundler : Bundler) =
         | Webpack -> "Webpack"
         | Parcel -> "Parcel"
         | Vite -> "Vite"
-        | Unkownn -> "Unkown"
+        | Unknown -> "Unknown"
 
     Html.section [
         prop.classes ["section"]
