@@ -26,6 +26,10 @@
         "type": "git",
         "url": "git+https://github.com/elmish/hmr.git"
     },
+    "brokenDeps": {
+        "nacara": "^1.6.1",
+        "nacara-layout-standard": "^1.7.0"
+    },
     "devDependencies": {
         "@babel/preset-react": "^7.16.0",
         "bulma": "^0.9.3",
@@ -34,8 +38,8 @@
         "concurrently": "^6.4.0",
         "gatsby-remark-vscode": "^3.3.0",
         "html-webpack-plugin": "^5.5.0",
-        "nacara": "^1.5.1",
-        "nacara-layout-standard": "^1.4.2",
+        "parcel": "^2.7.0",
+        "process": "^0.11.10",
         "parcel": "^2.0.1",
         "shelljs": "^0.8.4",
         "shx": "^0.3.3",
