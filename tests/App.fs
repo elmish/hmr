@@ -2,7 +2,6 @@ module App
 
 open Elmish
 open Feliz
-open Feliz.Bulma
 open Fable.Core
 open Browser
 open Elmish.UrlParser
@@ -92,40 +91,45 @@ let private update (msg : Msg) (model : Model) =
         , Cmd.OfPromise.perform tick () Tick
 
 let private liveCounter model =
-    Bulma.section [
-        Bulma.text.div [
-            text.hasTextCentered
+    Html.section [
+        prop.classes ["section"]
+        prop.children [
+            Html.div [
+                prop.classes ["has-text-centered"]
+                prop.children [
+                    Html.div [
+                        Html.text "Application is running since "
+                        Html.text (string model.Value)
+                        Html.text " seconds"
+                    ]
 
-            prop.children [
-                Html.div [
-                    Html.text "Application is running since "
-                    Html.text (string model.Value)
-                    Html.text " seconds"
+                    Html.br [ ]
+
+                    Html.text "Change me and check that the timer has not been reset"
                 ]
-
-                Html.br [ ]
-
-                Html.text "Change me and check that the timer has not been reset"
             ]
         ]
     ]
 
 let private navbar (model : Model) =
-    Bulma.navbar [
-        color.isInfo
-
+    Html.nav [
+        prop.classes ["navbar"; "is-info"]
         prop.children [
-            Bulma.navbarMenu [
+            Html.div [
+                prop.classes ["navbar-menu"]
                 prop.children [
-                    Bulma.navbarStart.div [
+                    Html.div [
+                        prop.classes ["navbar-start"]
                         prop.children [
-                            Bulma.navbarItem.a [
+                            Html.a [
+                                prop.classes ["navbar-item"]
                                 Router.href Router.Home
 
                                 prop.text "Home"
                             ]
 
-                            Bulma.navbarItem.a [
+                            Html.a [
+                                prop.classes ["navbar-item"]
                                 Router.href Router.About
 
                                 prop.text "About"
@@ -141,8 +145,8 @@ let private renderActivePage (page : Page) =
     let content =
         match page with
         | Page.Home ->
-            Bulma.text.p [
-                text.hasTextCentered
+            Html.p [
+                prop.classes ["has-text-centered"]
 
                 prop.children [
                     Html.text "This is the home page"
@@ -150,16 +154,19 @@ let private renderActivePage (page : Page) =
             ]
 
         | Page.About ->
-            Bulma.text.p [
-                text.hasTextCentered
+            Html.p [
+                prop.classes ["has-text-centered"]
 
                 prop.children [
                     Html.text "This is the about page"
                 ]
             ]
 
-    Bulma.section [
-        content
+    Html.section [
+        prop.classes ["section"]
+        prop.children [
+            content
+        ]
     ]
 
 let private renderBundlerInformation (bundler : Bundler) =
@@ -170,26 +177,32 @@ let private renderBundlerInformation (bundler : Bundler) =
         | Vite -> "Vite"
         | Unkownn -> "Unkown"
 
-    Bulma.section [
-        Bulma.text.p [
-            text.hasTextCentered
+    Html.section [
+        prop.classes ["section"]
+        prop.children [
+            Html.p [
+                prop.classes ["has-text-centered"]
 
-            prop.children [
-                Html.text "This is page is running using: "
-                Html.text bundlerText
+                prop.children [
+                    Html.text "This is page is running using: "
+                    Html.text bundlerText
+                ]
             ]
         ]
     ]
 
 let private lazyViewTest (_value : int) =
-    Bulma.section [
-        Bulma.text.div [
-            text.hasTextCentered
+    Html.section [
+        prop.classes ["section"]
+        prop.children [
+            Html.div [
+                prop.classes ["has-text-centered"]
 
-            prop.children [
-                Html.p "Change this text and see that it has been changed after HMR being applied"
-                Html.br [ ]
-                Html.p "If HMR was not supported this text would not change until a full refresh of the page"
+                prop.children [
+                    Html.p "Change this text and see that it has been changed after HMR being applied"
+                    Html.br [ ]
+                    Html.p "If HMR was not supported this text would not change until a full refresh of the page"
+                ]
             ]
         ]
     ]
@@ -206,8 +219,11 @@ let private view (model : Model) (dispatch : Dispatch<Msg>) =
 
         Html.hr [ ]
 
-        Bulma.container [
-            liveCounter model
+        Html.div [
+            prop.classes ["container"]
+            prop.children [
+                liveCounter model
+            ]
         ]
 
         Html.hr [ ]
@@ -235,7 +251,7 @@ let tickSubscription _ =
     Cmd.ofMsg (Tick ())
 
 Program.mkProgram init update view
-|> Program.withSubscription tickSubscription
+//|> Program.withSubscription tickSubscription
 |> Program.toNavigable (parseHash Router.pageParser) setRoute
 |> Program.withReactBatched "root"
 |> Program.run
