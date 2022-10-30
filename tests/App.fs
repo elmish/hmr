@@ -75,20 +75,28 @@ let private init (optRoute : Router.Route option) =
     }
     |> setRoute optRoute
 
-let private tick () =
-    promise {
-        do! Promise.sleep 1000
-
-        return ()
-    }
-
 let private update (msg : Msg) (model : Model) =
     match msg with
     | Tick _ ->
         { model with
             Value = model.Value + 1
         }
-        , Cmd.OfPromise.perform tick () Tick
+        , Cmd.none
+
+// We are not using Hooks for the Tick system to test Elmish HMR
+// support and not React HMR or React fast refresh
+
+module Sub =
+    let tick intervalMs onTick =
+        let subId = ["tick"]
+        let start dispatch =
+            let intervalId = JS.setInterval (fun () -> dispatch onTick) intervalMs
+            { new System.IDisposable with
+                member _.Dispose() = JS.clearInterval intervalId }
+        subId, start
+
+let private subscribe model =
+    [ Sub.tick 1000 (Tick ()) ]
 
 let private liveCounter model =
     Html.section [
@@ -238,20 +246,8 @@ let private view (model : Model) (dispatch : Dispatch<Msg>) =
 
 
 
-// Use a subscription to trigger the Tick system
-// If we try to trigger the ticks from the Update function
-// This doesn't work because dispatch instance available in the waiting tick refers
-// to the old programs meaning that the new instance never "Tick"
-
-// Also, we are not using Hooks for the Tick system because we want to test Elmish HMR
-// supports and not React HMR or React fast refresh
-
-// Trigger a Tick on program launch to start the timer
-let tickSubscription _ =
-    Cmd.ofMsg (Tick ())
-
 Program.mkProgram init update view
-//|> Program.withSubscription tickSubscription
+|> Program.withSubscription subscribe
 |> Program.toNavigable (parseHash Router.pageParser) setRoute
 |> Program.withReactBatched "root"
 |> Program.run
