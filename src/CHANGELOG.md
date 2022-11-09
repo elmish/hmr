@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 6.0.0-beta-003 - 2022-11-09
+
+* Support newest version of Elmish v4 with the new subscription system (by @kspeakman)
+
 ## 6.0.0-beta-002 - 2021-11-30
 
 * Remove Fable.Elmish.Browser dependency
