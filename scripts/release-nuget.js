@@ -1,10 +1,10 @@
-const path = require('path')
-const chalk = require('chalk')
-const shell = require('shelljs')
+import { resolve, basename } from 'path'
+import chalk from 'chalk'
+import shelljs from 'shelljs'
 
 const log = console.log
 
-const release = require("./release-core").release
+import { release } from "./release-core.js"
 
 const getEnvVariable = function (varName) {
     const value = process.env[varName];
@@ -23,7 +23,7 @@ if (process.argv.length < 4) {
 }
 
 const cwd = process.cwd()
-const baseDirectory = path.resolve(cwd, process.argv[2])
+const baseDirectory = resolve(cwd, process.argv[2])
 const projectFileName = process.argv[3]
 
 const NUGET_KEY = getEnvVariable("NUGET_KEY")
@@ -35,7 +35,7 @@ release({
     publishFn: async (versionInfo) => {
 
         const packResult =
-            shell.exec(
+            shelljs.exec(
                 "dotnet pack -c Release",
                 {
                     cwd: baseDirectory
@@ -46,10 +46,10 @@ release({
             throw "Dotnet pack failed"
         }
 
-        const fileName = path.basename(projectFileName, ".fsproj")
+        const fileName = basename(projectFileName, ".fsproj")
 
         const pushNugetResult =
-            shell.exec(
+            shelljs.exec(
                 `dotnet nuget push bin/Release/${fileName}.${versionInfo.version}.nupkg -s nuget.org -k ${NUGET_KEY}`,
                 {
                     cwd: baseDirectory

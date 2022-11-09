@@ -1,7 +1,7 @@
-const path = require('path')
-const fs = require('fs')
-const chalk = require('chalk')
-const parseChangelog = require('changelog-parser')
+import { resolve } from 'path'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
+import chalk from 'chalk'
+import parseChangelog from 'changelog-parser'
 
 const log = console.log
 
@@ -18,23 +18,23 @@ const log = console.log
  *
  * @param {Options} options
  */
-const release = async ( options ) => {
+export const release = async ( options ) => {
 
     // checks if the package.json and CHANGELOG exist
-    const changelogPath = path.resolve(options.baseDirectory, "CHANGELOG.md")
-    const packageJsonPath = path.resolve(options.baseDirectory, options.projectFileName)
+    const changelogPath = resolve(options.baseDirectory, "CHANGELOG.md")
+    const packageJsonPath = resolve(options.baseDirectory, options.projectFileName)
 
-    if (!fs.existsSync(changelogPath)) {
+    if (!existsSync(changelogPath)) {
         log(chalk.red(`CHANGELOG.md not found in ${options.baseDirectory}`))
     }
 
-    if (!fs.existsSync(packageJsonPath)) {
+    if (!existsSync(packageJsonPath)) {
         log(chalk.red(`${options.projectFileName} not found in ${options.baseDirectory}`))
     }
 
     // read files content
-    const changelogContent = fs.readFileSync(changelogPath).toString().replace("\r\n", "\n")
-    const packageJsonContent = fs.readFileSync(packageJsonPath).toString()
+    const changelogContent = readFileSync(changelogPath).toString().replace("\r\n", "\n")
+    const packageJsonContent = readFileSync(packageJsonPath).toString()
 
     const changelog = await parseChangelog({ text: changelogContent })
 
@@ -72,12 +72,12 @@ const release = async ( options ) => {
     const newPackageJsonContent = packageJsonContent.replace(options.versionRegex, `$1${versionInfo.version}$3`)
 
     // Update fsproj file on the disk
-    fs.writeFileSync(packageJsonPath, newPackageJsonContent)
+    writeFileSync(packageJsonPath, newPackageJsonContent)
 
     try {
         await options.publishFn(versionInfo)
     } catch (e) {
-        fs.writeFileSync(packageJsonPath, packageJsonContent)
+        writeFileSync(packageJsonPath, packageJsonContent)
         log(chalk.red("An error occured while publishing the new package"))
         log(chalk.blue("The files have been reverted to their original state"))
         process.exit(1)
@@ -86,5 +86,3 @@ const release = async ( options ) => {
     log(chalk.green(`Package published`))
     process.exit(0)
 }
-
-exports.release = release;
