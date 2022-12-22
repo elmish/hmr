@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 7.0.0 - 2022-12-22
+
+* Breaking: support for v4 elmish
+
 ## 6.0.0-beta-003 - 2022-11-09
 
 * Support newest version of Elmish v4 with the new subscription system (by @kspeakman)
