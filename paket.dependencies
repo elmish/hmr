@@ -2,7 +2,7 @@ source https://nuget.org/api/v2
 
 nuget FSharp.Core ~> 4.7.2 redirects:force, content:none
 nuget Fable.Elmish >= 4 
-nuget Fable.Elmish.React >= 4
+nuget Fable.Elmish.React >= 5 prerelease
 nuget Microsoft.SourceLink.GitHub copy_local: true
 
 group Tests
@@ -13,6 +13,6 @@ group Tests
     nuget Fable.Core
     nuget Fable.Elmish >= 4
     nuget Fable.Elmish.Browser >= 4
-    nuget Fable.Elmish.React >= 4
+    nuget Fable.Elmish.React >= 5 prerelease
     nuget Fable.Promise
-    nuget Feliz >= 2 prerelease
+    nuget Feliz >= 2
