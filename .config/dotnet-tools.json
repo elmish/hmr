@@ -6,13 +6,15 @@
       "version": "5.257.0",
       "commands": [
         "paket"
-      ]
+      ],
+      "rollForward": false
     },
     "fable": {
-      "version": "3.4.9",
+      "version": "4.26.0",
       "commands": [
         "fable"
-      ]
+      ],
+      "rollForward": false
     }
   }
 }
