@@ -375,4 +375,122 @@ let tests = testList "LazyView memo (HMR)" [
             flushSync (fun () -> root.render (lazyView2 view model ignore))
             Expect.equal renderCount 2 "hmrCount change should force re-render"
     ]
+
+    // -------------------------------------------------------
+    // withKey (ported from Fable.Elmish.React tests)
+    // -------------------------------------------------------
+
+    testList "withKey" [
+
+        testCase "sets key on a lazyView2 element" <| fun _ ->
+            resetHmrCount 0
+            let view (model: int) (_dispatch: unit Dispatch) = el "div" (string model)
+            let render = lazyView2With (=) view
+            let element = render 42 ignore |> Elmish.React.Common.withKey "my-key"
+            Expect.equal (getElementKey element) (Some "my-key") "key should be set"
+
+        testCase "sets key on a lazyViewWith element" <| fun _ ->
+            resetHmrCount 0
+            let view (model: int) = el "div" (string model)
+            let element = lazyViewWith (=) view 42 |> Elmish.React.Common.withKey "k1"
+            Expect.equal (getElementKey element) (Some "k1") "key should be set"
+
+        testCase "sets key on a lazyView3 element" <| fun _ ->
+            resetHmrCount 0
+            let view s1 s2 (_dispatch: unit Dispatch) = el "div" (sprintf "%d-%s" s1 s2)
+            let render = lazyView3With (=) view
+            let element = render 1 "a" ignore |> Elmish.React.Common.withKey "k3"
+            Expect.equal (getElementKey element) (Some "k3") "key should be set"
+
+        testCase "sets key on a plain ReactElement" <| fun _ ->
+            resetHmrCount 0
+            let element = el "span" "hello" |> Elmish.React.Common.withKey "plain"
+            Expect.equal (getElementKey element) (Some "plain") "key should be set on plain element"
+
+        testCase "element without withKey has no key" <| fun _ ->
+            resetHmrCount 0
+            let view (model: int) (_dispatch: unit Dispatch) = el "div" (string model)
+            let render = lazyView2With (=) view
+            let element = render 42 ignore
+            Expect.equal (getElementKey element) None "key should be None"
+
+        testCase "preserves element type" <| fun _ ->
+            resetHmrCount 0
+            let view (model: int) (_dispatch: unit Dispatch) = el "div" (string model)
+            let render = lazyView2With (=) view
+            let original = render 42 ignore
+            let keyed = original |> Elmish.React.Common.withKey "k"
+            Expect.isTrue
+                (obj.ReferenceEquals(getElementType original, getElementType keyed))
+                "element type should be preserved"
+
+        testCase "memo still skips render with withKey" <| fun _ ->
+            resetHmrCount 0
+            let mutable renderCount = 0
+            let view (model: {| value: int |}) (_dispatch: unit Dispatch) =
+                renderCount <- renderCount + 1
+                el "div" (string model.value)
+
+            let render = lazyView2With refEq view
+
+            let container = document.createElement "div"
+            let root = ReactDomClient.createRoot container
+            let model = {| value = 42 |}
+
+            flushSync (fun () ->
+                root.render (render model ignore |> Elmish.React.Common.withKey "k1"))
+            Expect.equal renderCount 1 "first render"
+
+            flushSync (fun () ->
+                root.render (render model ignore |> Elmish.React.Common.withKey "k1"))
+            Expect.equal renderCount 1 "memo should still skip with withKey"
+
+        testCase "keyed elements are reordered without remount" <| fun _ ->
+            resetHmrCount 0
+            // Shared mount counter accessible from JS
+            let counter : obj = emitJsExpr () "({current: 0})"
+            let getMountCount () : int = emitJsExpr counter "$0.current"
+
+            let react : obj = emitJsExpr ReactBindings.React "$0"
+            let comp : obj =
+                emitJsExpr
+                    (react, counter)
+                    """(function() {
+                        var R = $0, ctr = $1;
+                        function TrackedComp(props) {
+                            R.useEffect(function() { ctr.current++; }, []);
+                            return R.createElement('span', null, props.label);
+                        }
+                        return TrackedComp;
+                    })()"""
+
+            let makeEl label key =
+                ReactBindings.React.createElement(unbox comp, {| label = label |}, [])
+                |> Elmish.React.Common.withKey key
+
+            let container = document.createElement "div"
+            let root = ReactDomClient.createRoot container
+
+            // Render [A, B, C]
+            flushSync (fun () ->
+                root.render (
+                    ReactBindings.React.createElement("div", null, [
+                        makeEl "A" "a"
+                        makeEl "B" "b"
+                        makeEl "C" "c"
+                    ])))
+            Expect.equal (getMountCount()) 3 "initial mount of 3 items"
+            Expect.equal container.textContent "ABC" "initial order"
+
+            // Reorder to [C, A, B]
+            flushSync (fun () ->
+                root.render (
+                    ReactBindings.React.createElement("div", null, [
+                        makeEl "C" "c"
+                        makeEl "A" "a"
+                        makeEl "B" "b"
+                    ])))
+            Expect.equal (getMountCount()) 3 "keyed reorder should not remount"
+            Expect.equal container.textContent "CAB" "reordered content"
+    ]
 ]

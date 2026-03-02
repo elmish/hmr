@@ -4,6 +4,7 @@ open Fable.Mocha
 
 let allTests = testList "All" [
     LazyViewTests.tests
+    ProgramTests.tests
 ]
 
 [<EntryPoint>]
