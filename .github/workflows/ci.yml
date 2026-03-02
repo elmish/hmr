@@ -17,3 +17,10 @@ jobs:
         run: dotnet tool restore
       - name: Build package
         run: dotnet build src
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Run unit tests
+        run: npm test
