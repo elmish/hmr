@@ -4,57 +4,30 @@ open Fable.Core.JsInterop
 open Fable.React
 open Browser
 open Elmish
-open Elmish.React.Internal
 
 [<AutoOpen>]
 module Common =
 
+#if DEBUG
     [<NoComparison; NoEquality>]
-    type LazyProps<'model> = {
+    type private HmrMemoProps1<'model> = {
         model: 'model
-        render: unit -> ReactElement
         equal: 'model -> 'model -> bool
+        hmrCount: int
     }
 
-    type LazyState =
-        { HMRCount : int }
+    [<NoComparison; NoEquality>]
+    type private HmrMemoProps2<'model,'msg> = {
+        model: 'model
+        dispatch: 'msg Dispatch
+        equal: 'model -> 'model -> bool
+        hmrCount: int
+    }
 
-    module Components =
-        type LazyView<'model>(props) =
-            inherit Component<LazyProps<'model>,LazyState>(props)
+    let private getHmrCount () =
+        if isNull window?Elmish_HMR_Count then 0
+        else unbox<int> window?Elmish_HMR_Count
 
-            let hmrCount =
-                if isNull window?Elmish_HMR_Count then
-                    0
-                else
-                    unbox<int> window?Elmish_HMR_Count
-
-            do base.setInitState({ HMRCount = hmrCount})
-
-            override this.shouldComponentUpdate(nextProps, _nextState) =
-                // Note: It seems like if the tabs is not focus
-                // It can happen that the re-render doesn't happen
-                // I am not sure why
-                // In theory, this should not be a problem most of the times
-                match Bundler.current with
-                | Some _ ->
-                    let currentHmrCount : int = window?Elmish_HMR_Count
-                    if currentHmrCount > this.state.HMRCount then
-                        this.setState(fun _prevState _props ->
-                            { HMRCount = currentHmrCount }
-                        )
-                        // An HMR call has been triggered between two frames we force a rendering
-                        true
-                    else
-                        not <| this.props.equal this.props.model nextProps.model
-
-                | None ->
-                    not <| this.props.equal this.props.model nextProps.model
-
-            override this.render () =
-                this.props.render ()
-
-    #if DEBUG
     /// Avoid rendering the view unless the model has changed.
     /// equal: function to compare the previous and the new states
     /// view: function to render the model
@@ -62,12 +35,83 @@ module Common =
     let lazyViewWith (equal:'model->'model->bool)
                      (view:'model->ReactElement)
                      (state:'model) =
-        ofType<Components.LazyView<_>,_,_>
-            { render = fun () -> view state
-              equal = equal
-              model = state }
-            []
-    #else
+        let memoized : ReactElementType<HmrMemoProps1<'model>> =
+            emitJsExpr
+                (view, fun () ->
+                    let m =
+                        ReactBindings.React.memo(
+                            (fun (props: HmrMemoProps1<'model>) -> view props.model),
+                            (fun (prev: HmrMemoProps1<'model>) (next: HmrMemoProps1<'model>) ->
+                                prev.hmrCount = next.hmrCount
+                                && next.equal prev.model next.model))
+                    emitJsStatement (m, view) "$0.displayName = $1.name || void 0"
+                    m)
+                "$0.__memo || ($0.__memo = $1())"
+        ReactBindings.React.createElement(memoized, { model = state; equal = equal; hmrCount = getHmrCount() }, [])
+
+    /// Avoid rendering the view unless the model has changed.
+    /// equal: function to compare the previous and the new states
+    /// view: function to render the model using the dispatch
+    /// Partially apply with equal and view to get a cached rendering function:
+    /// let render = lazyView2With equal view
+    /// render state dispatch
+    let lazyView2With (equal:'model->'model->bool)
+                      (view:'model->'msg Dispatch->ReactElement) =
+        let memoized : ReactElementType<HmrMemoProps2<'model,'msg>> =
+            emitJsExpr
+                (view, fun () ->
+                    let m =
+                        ReactBindings.React.memo(
+                            (fun (props: HmrMemoProps2<'model,'msg>) -> view props.model props.dispatch),
+                            (fun (prev: HmrMemoProps2<'model,'msg>) (next: HmrMemoProps2<'model,'msg>) ->
+                                prev.hmrCount = next.hmrCount
+                                && next.equal prev.model next.model))
+                    emitJsStatement (m, view) "$0.displayName = $1.name || void 0"
+                    m)
+                "$0.__memo || ($0.__memo = $1())"
+        fun (state:'model) (dispatch:'msg Dispatch) ->
+            ReactBindings.React.createElement(memoized, { model = state; dispatch = dispatch; equal = equal; hmrCount = getHmrCount() }, [])
+
+    /// Avoid rendering the view unless the model has changed.
+    /// equal: function to compare the previous and the new model (a tuple of two states)
+    /// view: function to render the model using the dispatch
+    /// Partially apply with equal and view to get a cached rendering function:
+    /// let render = lazyView3With equal view
+    /// render state1 state2 dispatch
+    let lazyView3With (equal:_->_->bool) (view:_->_->_->ReactElement) =
+        let memoized : ReactElementType<HmrMemoProps2<_,_>> =
+            emitJsExpr
+                (view, fun () ->
+                    let m =
+                        ReactBindings.React.memo(
+                            (fun (props: HmrMemoProps2<_,_>) ->
+                                let (s1, s2) = props.model
+                                view s1 s2 props.dispatch),
+                            (fun (prev: HmrMemoProps2<_,_>) (next: HmrMemoProps2<_,_>) ->
+                                prev.hmrCount = next.hmrCount
+                                && next.equal prev.model next.model))
+                    emitJsStatement (m, view) "$0.displayName = $1.name || void 0"
+                    m)
+                "$0.__memo || ($0.__memo = $1())"
+        fun state1 state2 (dispatch:'msg Dispatch) ->
+            ReactBindings.React.createElement(memoized, { model = (state1, state2); dispatch = dispatch; equal = equal; hmrCount = getHmrCount() }, [])
+
+    /// Avoid rendering the view unless the model has changed.
+    /// view: function of model to render the view
+    let inline lazyView (view:'model->ReactElement) =
+        lazyViewWith (=) view
+
+    /// Avoid rendering the view unless the model has changed.
+    /// view: function of two arguments to render the model using the dispatch
+    let lazyView2 (view:'model->'msg Dispatch->ReactElement) =
+        lazyView2With (=) view
+
+    /// Avoid rendering the view unless the model has changed.
+    /// view: function of three arguments to render the model using the dispatch
+    let lazyView3 (view:_->_->_->ReactElement) =
+        lazyView3With (=) view
+
+#else
     /// Avoid rendering the view unless the model has changed.
     /// equal: function to compare the previous and the new states
     /// view: function to render the model
@@ -76,93 +120,34 @@ module Common =
                      (view:'model->ReactElement)
                      (state:'model) =
         Elmish.React.Common.lazyViewWith equal view state
-    #endif
 
-    #if DEBUG
     /// Avoid rendering the view unless the model has changed.
     /// equal: function to compare the previous and the new states
     /// view: function to render the model using the dispatch
-    /// state: new state to render
-    /// dispatch: dispatch function
-    let lazyView2With (equal:'model->'model->bool)
-                      (view:'model->'msg Dispatch->ReactElement)
-                      (state:'model)
-                      (dispatch:'msg Dispatch) =
-        ofType<Components.LazyView<_>,_,_>
-            { render = fun () -> view state dispatch
-              equal = equal
-              model = state }
-            []
-    #else
-    /// Avoid rendering the view unless the model has changed.
-    /// equal: function to compare the previous and the new states
-    /// view: function to render the model using the dispatch
-    /// state: new state to render
-    /// dispatch: dispatch function
+    /// Partially apply with equal and view to get a cached rendering function
     let inline lazyView2With (equal:'model->'model->bool)
-                      (view:'model->'msg Dispatch->ReactElement)
-                      (state:'model)
-                      (dispatch:'msg Dispatch) =
-        Elmish.React.Common.lazyView2With equal view state dispatch
-    #endif
+                      (view:'model->'msg Dispatch->ReactElement) =
+        Elmish.React.Common.lazyView2With equal view
 
-    #if DEBUG
     /// Avoid rendering the view unless the model has changed.
     /// equal: function to compare the previous and the new model (a tuple of two states)
     /// view: function to render the model using the dispatch
-    /// state1: new state to render
-    /// state2: new state to render
-    /// dispatch: dispatch function
-    let lazyView3With (equal:_->_->bool) (view:_->_->_->ReactElement) state1 state2 (dispatch:'msg Dispatch) =
-        ofType<Components.LazyView<_>,_,_>
-            { render = fun () -> view state1 state2 dispatch
-              equal = equal
-              model = (state1,state2) }
-            []
-    #else
-    /// Avoid rendering the view unless the model has changed.
-    /// equal: function to compare the previous and the new model (a tuple of two states)
-    /// view: function to render the model using the dispatch
-    /// state1: new state to render
-    /// state2: new state to render
-    /// dispatch: dispatch function
-    let inline lazyView3With (equal:_->_->bool) (view:_->_->_->ReactElement) state1 state2 (dispatch:'msg Dispatch) =
-        Elmish.React.Common.lazyView3With equal view state1 state2 dispatch
-    #endif
+    /// Partially apply with equal and view to get a cached rendering function
+    let inline lazyView3With (equal:_->_->bool) (view:_->_->_->ReactElement) =
+        Elmish.React.Common.lazyView3With equal view
 
-
-    #if DEBUG
-    /// Avoid rendering the view unless the model has changed.
-    /// view: function of model to render the view
-    let inline lazyView (view:'model->ReactElement) =
-        lazyViewWith (=) view
-    #else
     /// Avoid rendering the view unless the model has changed.
     /// view: function of model to render the view
     let inline lazyView (view:'model->ReactElement) =
         Elmish.React.Common.lazyView view
-    #endif
 
-    #if DEBUG
-    /// Avoid rendering the view unless the model has changed.
-    /// view: function of two arguments to render the model using the dispatch
-    let lazyView2 (view:'model->'msg Dispatch->ReactElement) =
-        lazyView2With (=) view
-    #else
     /// Avoid rendering the view unless the model has changed.
     /// view: function of two arguments to render the model using the dispatch
     let inline lazyView2 (view:'model->'msg Dispatch->ReactElement) =
         Elmish.React.Common.lazyView2 view
-    #endif
 
-    #if DEBUG
-    /// Avoid rendering the view unless the model has changed.
-    /// view: function of three arguments to render the model using the dispatch
-    let lazyView3 (view:_->_->_->ReactElement) =
-        lazyView3With (=) view
-    #else
     /// Avoid rendering the view unless the model has changed.
     /// view: function of three arguments to render the model using the dispatch
     let inline lazyView3 (view:_->_->_->ReactElement) =
         Elmish.React.Common.lazyView3 view
-    #endif
+#endif
