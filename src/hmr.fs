@@ -1,6 +1,7 @@
 namespace Elmish.HMR
 
 open Fable.Core.JsInterop
+open Fable.React
 open Browser
 open Elmish
 
@@ -174,39 +175,94 @@ module Program =
         Shadow: Fable.Elmish.React
     *)
 
+#if DEBUG
+    module RootCache =
+        let private rootKey (placeholderId: string) = "__elmish_hmr_root_" + placeholderId
+        let private rafKey (placeholderId: string) = "__elmish_hmr_raf_" + placeholderId
+
+        /// Get an existing React root for placeholderId, or create one via createRoot.
+        let getOrCreateRoot (placeholderId: string) : IReactRoot =
+            let key = rootKey placeholderId
+            let existing : IReactRoot = unbox window?(key)
+            if isNull (box existing) then
+                let root = ReactDomClient.createRoot (document.getElementById placeholderId)
+                window?(key) <- root
+                root
+            else
+                existing
+
+        /// Get an existing React root for placeholderId, or create one via hydrateRoot.
+        let getOrHydrateRoot (placeholderId: string) (element: ReactElement) : IReactRoot =
+            let key = rootKey placeholderId
+            let existing : IReactRoot = unbox window?(key)
+            if isNull (box existing) then
+                let root = ReactDomClient.hydrateRoot (document.getElementById placeholderId, element)
+                window?(key) <- root
+                root
+            else
+                existing
+
+        /// Cancel any pending requestAnimationFrame from a previous HMR cycle.
+        let cancelPendingRaf (placeholderId: string) =
+            let key = rafKey placeholderId
+            let pending : float option = unbox window?(key)
+            match pending with
+            | Some handle ->
+                window.cancelAnimationFrame handle
+                window?(key) <- null
+            | None -> ()
+
+        /// Store the requestAnimationFrame handle for a placeholder.
+        let savePendingRaf (placeholderId: string) (handle: float) =
+            let key = rafKey placeholderId
+            window?(key) <- Some handle
+#endif
+
     let inline withReactBatched placeholderId (program: Program<_,_,_,_>) =
 #if !DEBUG
         Elmish.React.Program.withReactBatched placeholderId program
 #else
-        Elmish.React.Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
+        let render = lazyView2With (fun x y -> obj.ReferenceEquals(x,y)) (Program.view program)
+        // Cancel any pending render from the previous HMR cycle
+        RootCache.cancelPendingRaf placeholderId
+        let root = RootCache.getOrCreateRoot placeholderId
+        let setState model dispatch =
+            RootCache.cancelPendingRaf placeholderId
+            window.requestAnimationFrame (fun _ ->
+                root.render (render model dispatch))
+            |> RootCache.savePendingRaf placeholderId
+        program
+        |> Program.withSetState setState
 #endif
 
     let inline withReactSynchronous placeholderId (program: Program<_,_,_,_>) =
 #if !DEBUG
         Elmish.React.Program.withReactSynchronous placeholderId program
 #else
-        Elmish.React.Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
+        let render = lazyView2With (fun x y -> obj.ReferenceEquals(x,y)) (Program.view program)
+        let root = RootCache.getOrCreateRoot placeholderId
+        let setState model dispatch =
+            root.render (render model dispatch)
+        program
+        |> Program.withSetState setState
 #endif
 
     let inline withReactHydrate placeholderId (program: Program<_,_,_,_>) =
 #if !DEBUG
         Elmish.React.Program.withReactHydrate placeholderId program
 #else
-        Elmish.React.Program.Internal.withReactHydrateUsing lazyView2With placeholderId program
+        let render = lazyView2With (fun x y -> obj.ReferenceEquals(x,y)) (Program.view program)
+        let root = RootCache.getOrHydrateRoot placeholderId (render (unbox null) ignore)
+        let setState model dispatch =
+            root.render (render model dispatch)
+        program
+        |> Program.withSetState setState
 #endif
 
     [<System.Obsolete("Use withReactBatched")>]
     let inline withReact placeholderId (program: Program<_,_,_,_>) =
-#if !DEBUG
-        Elmish.React.Program.withReactBatched placeholderId program
-#else
-        Elmish.React.Program.Internal.withReactBatchedUsing lazyView2With placeholderId program
-#endif
+        withReactBatched placeholderId program
 
     [<System.Obsolete("Use withReactSynchronous")>]
     let inline withReactUnoptimized placeholderId (program: Program<_,_,_,_>) =
-#if !DEBUG
-        Elmish.React.Program.withReactSynchronous placeholderId program
-#else
-        Elmish.React.Program.Internal.withReactSynchronousUsing lazyView2With placeholderId program
-#endif
+        withReactSynchronous placeholderId program

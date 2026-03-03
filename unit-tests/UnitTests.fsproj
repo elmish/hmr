@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Helpers.fs" />
+    <Compile Include="DisplayNameViews.fs" />
+    <Compile Include="LazyViewTests.fs" />
+    <Compile Include="ProgramTests.fs" />
+    <Compile Include="Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../src/Fable.Elmish.HMR.fsproj" />
+    <PackageReference Include="Fable.Mocha" Version="2.*" />
+  </ItemGroup>
+</Project>
