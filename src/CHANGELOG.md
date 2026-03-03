@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 9.0.0-beta.1 - 2026-03-03
+
+* Update support Fable.Elmish.React 5.5.0-beta-1 (by @et1975)
+* Cache React root, to avoid warning about multiple roots (by @et1975)
+
 ## 8.0.0 - 2025-07-20
 
 * Update to support Fable.React 9.4 (by @bigjonroberts)
