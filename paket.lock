@@ -20,11 +20,12 @@ NUGET
       Fable.Browser.Event (>= 1.6) - restriction: >= netstandard2.0
       Fable.Core (>= 3.2.8) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
-    Fable.Core (4.5) - restriction: >= netstandard2.0
+    Fable.Core (5.0) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     Fable.Elmish (5.0.2)
       Fable.Core (>= 4.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
-    Fable.Elmish.React (5.5.0-beta-1)
+    Fable.Elmish.React (5.6)
       Fable.Elmish (>= 5.0.2) - restriction: >= netstandard2.0
       Fable.ReactDom.Types (>= 18.2) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
@@ -36,16 +37,28 @@ NUGET
       Fable.React.Types (>= 18.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     FSharp.Core (4.7.2) - content: none, redirects: force
-    Microsoft.Build.Tasks.Git (8.0) - copy_local: true
-    Microsoft.SourceLink.Common (8.0) - copy_local: true
-    Microsoft.SourceLink.GitHub (8.0) - copy_local: true
-      Microsoft.Build.Tasks.Git (>= 8.0)
-      Microsoft.SourceLink.Common (>= 8.0)
+    Microsoft.Build.Tasks.Git (10.0.202) - copy_local: true, restriction: >= net472
+      System.IO.Hashing (>= 10.0.6) - restriction: >= net472
+    Microsoft.SourceLink.Common (10.0.202) - copy_local: true, restriction: >= net472
+    Microsoft.SourceLink.GitHub (10.0.202) - copy_local: true
+      Microsoft.Build.Tasks.Git (>= 10.0.202) - restriction: >= net472
+      Microsoft.SourceLink.Common (>= 10.0.202) - restriction: >= net472
+      System.IO.Hashing (>= 10.0.6) - restriction: >= net472
+    System.Buffers (4.6.1) - copy_local: true, restriction: >= net472
+    System.IO.Hashing (10.0.6) - copy_local: true, restriction: >= net472
+      System.Buffers (>= 4.6.1) - restriction: || (>= net462) (>= netstandard2.0)
+      System.Memory (>= 4.6.3) - restriction: || (>= net462) (>= netstandard2.0)
+    System.Memory (4.6.3) - copy_local: true, restriction: >= net472
+      System.Buffers (>= 4.6.1) - restriction: || (>= net462) (&& (< netcoreapp2.1) (>= netstandard2.0) (< netstandard2.1))
+      System.Numerics.Vectors (>= 4.6.1) - restriction: || (>= net462) (&& (< netcoreapp2.1) (>= netstandard2.0) (< netstandard2.1))
+      System.Runtime.CompilerServices.Unsafe (>= 6.1.2) - restriction: || (>= net462) (&& (< netcoreapp2.1) (>= netstandard2.0) (< netstandard2.1))
+    System.Numerics.Vectors (4.6.1) - copy_local: true, restriction: >= net472
+    System.Runtime.CompilerServices.Unsafe (6.1.2) - copy_local: true, restriction: >= net472
 
 GROUP Tests
 NUGET
   remote: https://www.nuget.org/api/v2
-    Fable.AST (4.5) - restriction: >= netstandard2.0
+    Fable.AST (5.0) - restriction: >= netstandard2.0
     Fable.Browser.Blob (1.4) - restriction: >= netstandard2.0
       Fable.Core (>= 3.2.8) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
@@ -66,7 +79,8 @@ NUGET
       Fable.Browser.Event (>= 1.6) - restriction: >= netstandard2.0
       Fable.Core (>= 3.2.8) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
-    Fable.Core (4.5)
+    Fable.Core (5.0)
+      FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     Fable.Elmish (5.0.2)
       Fable.Core (>= 4.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
@@ -75,8 +89,8 @@ NUGET
       Fable.Elmish (>= 4.2) - restriction: >= netstandard2.0
       Fable.Elmish.UrlParser (>= 1.0.2) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
-    Fable.Elmish.React (5.0)
-      Fable.Elmish (>= 5.0) - restriction: >= netstandard2.0
+    Fable.Elmish.React (5.6)
+      Fable.Elmish (>= 5.0.2) - restriction: >= netstandard2.0
       Fable.ReactDom.Types (>= 18.2) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     Fable.Elmish.UrlParser (1.0.2) - restriction: >= netstandard2.0
@@ -91,11 +105,11 @@ NUGET
     Fable.ReactDom.Types (18.2) - restriction: >= netstandard2.0
       Fable.React.Types (>= 18.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
-    Feliz (2.9)
+    Feliz (3.3.1)
+      Fable.Core (>= 4.5) - restriction: >= netstandard2.0
+      Fable.React.Types (>= 18.4) - restriction: >= netstandard2.0
       Fable.ReactDom.Types (>= 18.2) - restriction: >= netstandard2.0
-      Feliz.CompilerPlugins (>= 2.2) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
-    Feliz.CompilerPlugins (2.2) - restriction: >= netstandard2.0
-      Fable.AST (>= 4.2.1) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
+      Feliz.CompilerPlugins (>= 3.1) - restriction: >= netstandard2.0
+    Feliz.CompilerPlugins (3.1) - restriction: >= netstandard2.0
+      Fable.AST (>= 5.0.0-rc.3) - restriction: >= netstandard2.0
     FSharp.Core (4.7.2) - content: none, redirects: force
